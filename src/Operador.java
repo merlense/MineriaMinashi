@@ -6,6 +6,8 @@ public class Operador extends Usuario {
 	}
 	
 
+	
+	
 	@Override
 	public void login() {
 			
