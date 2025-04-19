@@ -2,8 +2,8 @@
 public class Encargado_Venta extends Usuario {
 
 	
-	public Encargado_Venta(String usuario, String contrasenia) {
-		super(usuario, contrasenia);
+	public Encargado_Venta(String mail, String contrasenia) {
+		super(mail, contrasenia);
 	}
 	
 	@Override

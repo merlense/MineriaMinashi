@@ -1,8 +1,8 @@
 
 public class Operador extends Usuario {
 
-	public Operador(String usuario, String contrasenia) {
-		super(usuario, contrasenia);
+	public Operador(String mail, String contrasenia) {
+		super(mail, contrasenia);
 	}
 	
 

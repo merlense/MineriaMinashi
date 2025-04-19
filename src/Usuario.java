@@ -1,24 +1,24 @@
 
 public class Usuario {
 
-	private String Usuario;
+	private String Mail;
 	private String Contrasenia;
 	
 	
-	public Usuario(String usuario, String contrasenia) {
+	public Usuario(String mail, String contrasenia) {
 		super();
-		Usuario = usuario;
+		Mail = mail;
 		Contrasenia = contrasenia;
 	}
 
 
 	public String getUsuario() {
-		return Usuario;
+		return Mail;
 	}
 
 
 	public void setUsuario(String usuario) {
-		Usuario = usuario;
+		Mail = usuario;
 	}
 
 
