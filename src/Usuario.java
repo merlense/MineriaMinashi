@@ -12,13 +12,13 @@ public class Usuario {
 	}
 
 
-	public String getUsuario() {
+	public String getMail() {
 		return Mail;
 	}
 
 
-	public void setUsuario(String usuario) {
-		Mail = usuario;
+	public void setMail(String mail) {
+		Mail = mail;
 	}
 
 
