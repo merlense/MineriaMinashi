@@ -1,8 +1,8 @@
 
 public interface Validacion {
 
-	default boolean ValidarMail(String data) {
-		if (data.contains("@gmail.edu.ar")) {
+	default boolean ValidarMail(String mail) {
+		if (mail.equals("@gmail.com.ar")) {
 			return true;
 		}else {
 			return false;
