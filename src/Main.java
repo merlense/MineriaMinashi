@@ -3,6 +3,8 @@ import javax.swing.JOptionPane;
 public class Main {
 
 	public static void main(String[] args) {
+		
+		Conexion.getInstance();
 
 		Operador operador = new Operador("mora@gmail.com", "1234567");
 		Cliente cliente = new Cliente("bruno@gmail.com", "12345678");
@@ -11,7 +13,7 @@ public class Main {
 		JOptionPane.showMessageDialog(null, "Bienvenido a la Mineria Minashi :)");
 
 		String[] opcionesOperador = {"Ver pedidos", "Explotar mineral", "Agregar stock", "Salir"};
-		String[] opcionesCliente = {"Ver catalogo", "Hacer pedido", "Finalizar pedido", "Salir"};  //VER ESTADO, VENTA
+		String[] opcionesCliente = {"Ver catalogo", "Hacer pedido", "Finalizar pedido", "Salir"};  //VER ESTADO, VENTA...
 		String[] opcionesEncargado = {"Ver pedidos", "Revisar stock", "Eliminar pedidos", "Salir"};
 		
 		//SE PODRIA AGREGAR A FUTURO UNA OPCION DE "RESUMEN DE VENTAS", ETC. PARA DARLE MAS ENTIDAD AL ENCARGADO.
