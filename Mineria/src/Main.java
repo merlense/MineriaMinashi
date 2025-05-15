@@ -10,7 +10,7 @@ public class Main {
 		Cliente cliente = new Cliente("bruno@gmail.com", "12345678");
 		Encargado_Venta encargado = new Encargado_Venta("martina@gmail.com", "123456789");
 
-		JOptionPane.showMessageDialog(null, "Bienvenido a la Mineria Minashi :)");
+		JOptionPane.showMessageDialog(null, "Bienvenido a la Mineria Minashi :)"):
 
 		String[] opcionesOperador = {"Ver pedidos", "Explotar mineral", "Agregar stock", "Salir"};
 		String[] opcionesCliente = {"Ver catalogo", "Hacer pedido", "Finalizar pedido", "Salir"};  //VER ESTADO, VENTA...
