@@ -1,19 +1,26 @@
 
 public class Operador extends Usuario {
 
-	public Operador(String mail, String contrasenia) {
-		super(mail, contrasenia);
+	
+	public Operador(int id, String nombre, String apellido, String tipo, String email, String contrasenia) {
+		super(id, nombre, apellido, tipo, email, contrasenia);
+		// TODO Auto-generated constructor stub
 	}
-	
 
-	
-	
 	@Override
-	public void login() {
-			
-		}
-
-	public void agregarMineral (Mineral Mineral) {
-		
+	public String toString() {
+		return "Operador [id=" + id + ", nombre=" + nombre + ", apellido=" + apellido + ", tipo=" + tipo + ", email="
+				+ email + ", Contrasenia=" + Contrasenia + "]";
 	}
+
+
+	//@Override
+	//public void login() {
+			
+		//}
+
+	
+	//public void agregarMineral (Mineral Mineral) {
+		
+	//}
 	}
