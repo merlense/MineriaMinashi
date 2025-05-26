@@ -1,5 +1,5 @@
 
-public class Usuario {
+public class Usuario implements Encriptador{
 
 	protected int id;
     protected String nombre;
@@ -17,6 +17,19 @@ public class Usuario {
 		this.email = email;
 		Contrasenia = contrasenia;
 	}
+	
+	public Usuario(String nombre, String apellido, String tipo, String email, String contrasenia) {
+		super();
+		this.nombre = nombre;
+		this.apellido = apellido;
+		this.tipo = tipo;
+		this.email = email;
+		Contrasenia = contrasenia;
+	}
+	
+	 public Usuario() {
+	      
+	    }
 
 	public int getId() {
 		return id;

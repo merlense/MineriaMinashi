@@ -38,10 +38,8 @@ public class Main {
                     if (usuario != null) {
                         if (usuario instanceof Cliente) {
                             JOptionPane.showMessageDialog(null, "Bienvenido Cliente " + usuario.getNombre());
-                            // Ir a menu de profesor
                         } else if (usuario instanceof Operador) {
                             JOptionPane.showMessageDialog(null, "Bienvenido Operador " + usuario.getNombre());
-                            // Ir a menu de alumno
                         } else if (usuario instanceof Encargado_Venta) {
                             JOptionPane.showMessageDialog(null, "Bienvenido Encargado de venta " + usuario.getNombre());
                         }
@@ -51,40 +49,7 @@ public class Main {
                     break;
 
                 case 1:  // REGISTRO (solo clientes)
-                    String nombreRegistro = JOptionPane.showInputDialog("Ingrese nombre");
-                    if (nombreRegistro == null || nombreRegistro.trim().isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "Nombre inválido");
-                        break;
-                    }
-
-                    String apellido = JOptionPane.showInputDialog("Ingrese apellido");
-                    if (apellido == null || apellido.trim().isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "Apellido inválido");
-                        break;
-                    }
-
-                    String nuevoEmail = JOptionPane.showInputDialog("Ingrese email");
-                    if (nuevoEmail == null || nuevoEmail.trim().isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "Email inválido");
-                        break;
-                    }
-
-                    if (controller.existeEmail(nuevoEmail)) {
-                        JOptionPane.showMessageDialog(null, "El email ya está registrado");
-                        break;
-                    }
-
-                    String nuevaContrasenia = JOptionPane.showInputDialog("Ingrese contraseña");
-                    if (nuevaContrasenia == null || nuevaContrasenia.trim().isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "Contraseña inválida");
-                        break;
-                    }
-
-                    Usuario nuevoUsuario = new Cliente(0, nombreRegistro, apellido, "Cliente", nuevoEmail, nuevaContrasenia);
-
-                    controller.agregarUsuario(nuevoUsuario);
-                    JOptionPane.showMessageDialog(null, "Cliente registrado correctamente");
-                    break;
+                    
             }
         } while (menu != 2);
 		

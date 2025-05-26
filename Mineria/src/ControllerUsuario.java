@@ -7,14 +7,14 @@ public class ControllerUsuario<T extends Usuario> {
 
     private static Connection con = Conexion.getInstance().getConnection();
 
-    public T login(String email, String password) {
-        T usuario = null;
+    public Usuario login(String email, String password) {
+        Usuario usuario = new Usuario();
         try {
             PreparedStatement stmt = con.prepareStatement(
                 "SELECT * FROM usuario WHERE email = ? AND password = ?"
             );
             stmt.setString(1, email);
-            stmt.setString(2, password);
+            stmt.setString(2, usuario.encriptar(password));
 
             ResultSet rs = stmt.executeQuery();
 
@@ -54,7 +54,7 @@ public class ControllerUsuario<T extends Usuario> {
             statement.setString(2, usuario.getApellido());
             statement.setString(3, usuario.getTipo());
             statement.setString(4, usuario.getEmail());
-            statement.setString(5, usuario.getContrasenia());
+            statement.setString(5, usuario.encriptar(usuario.getContrasenia()));
 
             int filas = statement.executeUpdate();
             if (filas > 0) {
