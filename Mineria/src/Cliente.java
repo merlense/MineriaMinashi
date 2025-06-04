@@ -2,27 +2,18 @@ import javax.swing.JOptionPane;
 
 public class Cliente extends Usuario{
 
-	
-	public Cliente(String mail, String contrasenia) {
-		super(mail, contrasenia);
+	public Cliente(int id, String nombre, String apellido, String tipo, String email, String contrasenia) {
+		super(id, nombre, apellido, tipo, email, contrasenia);
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public void login() {
-		JOptionPane.showConfirmDialog(null, "Usted esta por ingresar sesion...");
-		JOptionPane.showMessageDialog(null, "Ingrese su mail");
-			String mail = JOptionPane.showInputDialog("");
-			JOptionPane.showMessageDialog(null, "Ingrese su contraseña");
-			String contrasenia = JOptionPane.showInputDialog("");
-		}
-	
-	
-	public void registrarte() {
-		JOptionPane.showConfirmDialog(null, "Usted esta por registrarse...");
-		JOptionPane.showMessageDialog(null, "Ingrese su mail");
-			String mail = JOptionPane.showInputDialog("");
-			JOptionPane.showMessageDialog(null, "Ingrese su contraseña");
-			String contrasenia = JOptionPane.showInputDialog("");
+	public String toString() {
+		return "Cliente [id=" + id + ", nombre=" + nombre + ", apellido=" + apellido + ", tipo=" + tipo + ", email="
+				+ email + ", Contrasenia=" + Contrasenia + "]";
 	}
+
+	
+
 	
 }
