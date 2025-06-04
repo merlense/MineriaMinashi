@@ -49,7 +49,7 @@ public class Main {
                     break;
 
                 case 1:  // REGISTRO (solo clientes)
-                    
+                    //lajshdkjas
             }
         } while (menu != 2);
 		
