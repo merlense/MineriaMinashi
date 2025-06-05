@@ -1,20 +1,31 @@
+package DLL;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.LinkedList;
 
-public class ControllerUsuario<T extends Usuario> {
+import BLL.Usuario;
+import BLL.Cliente;
+import BLL.Operador;
+import BLL.Encargado_Venta;
 
-    private static Connection con = Conexion.getInstance().getConnection();
+public class ControllerUsuario {
+
+    private Connection con;
+
+    public ControllerUsuario() {
+        // Cada vez que creás un ControllerUsuario, se guarda la conexión
+        this.con = Conexion.getInstance().getConnection();
+    }
 
     public Usuario login(String email, String password) {
-        Usuario usuario = new Usuario();
+        Usuario usuario = null;
         try {
-            PreparedStatement stmt = con.prepareStatement(
-                "SELECT * FROM usuario WHERE email = ? AND password = ?"
-            );
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM usuario WHERE email = ? AND password = ?");
+            Usuario temp = new Usuario();
             stmt.setString(1, email);
-            stmt.setString(2, usuario.encriptar(password));
+            stmt.setString(2, temp.encriptar(password));
 
             ResultSet rs = stmt.executeQuery();
 
@@ -26,13 +37,13 @@ public class ControllerUsuario<T extends Usuario> {
 
                 switch (tipo.toLowerCase()) {
                     case "cliente":
-                        usuario = (T) new Cliente(id, nombre, apellido, tipo, email, password);
+                        usuario = new Cliente(id, nombre, apellido, tipo, email, password);
                         break;
                     case "operador":
-                        usuario = (T) new Operador(id, nombre, apellido, tipo, email, password);
+                        usuario = new Operador(id, nombre, apellido, tipo, email, password);
                         break;
                     case "encargado":
-                        usuario = (T) new Encargado_Venta(id, nombre, apellido, tipo, email, password);
+                        usuario = new Encargado_Venta(id, nombre, apellido, tipo, email, password);
                         break;
                     default:
                         System.out.println("Tipo de usuario desconocido: " + tipo);
@@ -47,16 +58,16 @@ public class ControllerUsuario<T extends Usuario> {
 
     public void agregarUsuario(Usuario usuario) {
         try {
-            PreparedStatement statement = con.prepareStatement(
-                    "INSERT INTO usuario (nombre, apellido, tipo, email, password) VALUES (?, ?, ?, ?, ?)"
+            PreparedStatement stmt = con.prepareStatement(
+                "INSERT INTO usuario (nombre, apellido, tipo, email, password) VALUES (?, ?, ?, ?, ?)"
             );
-            statement.setString(1, usuario.getNombre());
-            statement.setString(2, usuario.getApellido());
-            statement.setString(3, usuario.getTipo());
-            statement.setString(4, usuario.getEmail());
-            statement.setString(5, usuario.encriptar(usuario.getContrasenia()));
+            stmt.setString(1, usuario.getNombre());
+            stmt.setString(2, usuario.getApellido());
+            stmt.setString(3, usuario.getTipo());
+            stmt.setString(4, usuario.getEmail());
+            stmt.setString(5, usuario.encriptar(usuario.getContrasenia()));
 
-            int filas = statement.executeUpdate();
+            int filas = stmt.executeUpdate();
             if (filas > 0) {
                 System.out.println("Usuario agregado correctamente.");
             }
@@ -64,7 +75,6 @@ public class ControllerUsuario<T extends Usuario> {
             e.printStackTrace();
         }
     }
-
 
     public boolean existeEmail(String email) {
         try {
@@ -77,7 +87,7 @@ public class ControllerUsuario<T extends Usuario> {
         }
         return false;
     }
-    
+
     public LinkedList<Usuario> mostrarUsuarios() {
         LinkedList<Usuario> usuarios = new LinkedList<>();
         try {
@@ -92,19 +102,24 @@ public class ControllerUsuario<T extends Usuario> {
                 String email = rs.getString("email");
                 String password = rs.getString("password");
 
+                Usuario usuario = null;
                 switch (tipo.toLowerCase()) {
                     case "cliente":
-                        usuarios.add((T) new Cliente(id, nombre, apellido, tipo, email, password));
+                        usuario = new Cliente(id, nombre, apellido, tipo, email, password);
                         break;
                     case "operador":
-                        usuarios.add((T) new Operador(id, nombre, apellido, tipo, email, password));
+                        usuario = new Operador(id, nombre, apellido, tipo, email, password);
                         break;
                     case "encargado":
-                        usuarios.add((T) new Encargado_Venta(id, nombre, apellido, tipo, email, password));
+                        usuario = new Encargado_Venta(id, nombre, apellido, tipo, email, password);
                         break;
                     default:
                         System.out.println("Tipo desconocido: " + tipo);
                         break;
+                }
+
+                if (usuario != null) {
+                    usuarios.add(usuario);
                 }
             }
         } catch (Exception e) {

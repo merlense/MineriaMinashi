@@ -1,3 +1,4 @@
+package BLL;
 import javax.swing.JOptionPane;
 
 public class Cliente extends Usuario{

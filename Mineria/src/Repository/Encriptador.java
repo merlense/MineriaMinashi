@@ -1,3 +1,4 @@
+package Repository;
 
 public interface Encriptador {
 

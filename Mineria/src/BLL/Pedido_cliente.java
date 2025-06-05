@@ -1,4 +1,4 @@
-
+package BLL;
 public class Pedido_cliente {
 
 	private Cliente cliente;

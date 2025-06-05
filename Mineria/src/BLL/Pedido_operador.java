@@ -1,4 +1,4 @@
-
+package BLL;
 public class Pedido_operador {
 
 	private Operador operador;

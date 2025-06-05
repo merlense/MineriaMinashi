@@ -1,4 +1,4 @@
-
+package BLL;
 public class Operador extends Usuario {
 
 	
