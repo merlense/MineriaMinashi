@@ -80,14 +80,40 @@ public class PantallaPrincipal extends JFrame {
 		contentPane.add(passwordField);
 	
 		JButton LoginBtn = new JButton("Login");
+		
 		LoginBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				// Aca se pondria la accion del login
-				
-				
-			}
+		    public void actionPerformed(ActionEvent e) {
+		        String email = InputEmail.getText().trim();
+		        String password = new String(passwordField.getPassword()).trim();
+
+		        if (email.isEmpty() && password.isEmpty()) {
+		            JOptionPane.showMessageDialog(null, "Los campos no pueden estar vacíos");
+		            return;
+		        }
+
+		        if (email.isEmpty()) {
+		            JOptionPane.showMessageDialog(null, "Debe ingresar el email");
+		            return;
+		        }
+
+		        if (password.isEmpty()) {
+		            JOptionPane.showMessageDialog(null, "Debe ingresar la contraseña");
+		            return;
+		        }
+
+		        DLL.ControllerUsuario controller = new DLL.ControllerUsuario();
+		        BLL.Usuario usuario = controller.login(email, password);
+
+		        if (usuario != null) {
+		            JOptionPane.showMessageDialog(null, "Bienvenido " + usuario.getTipo() + " " + usuario.getNombre());
+		            // Acá podrías abrir una nueva ventana dependiendo del tipo de usuario
+		        } else {
+		            JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
+		        }
+		    }
 		});
+
+		
 		LoginBtn.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		LoginBtn.setBounds(9, 214, 106, 28);
 		contentPane.add(LoginBtn);

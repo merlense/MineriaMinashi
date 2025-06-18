@@ -13,54 +13,53 @@ public class Main {
 	public static void main(String[] args) {
 		
 		Conexion.getInstance();
-        ControllerUsuario controller = new ControllerUsuario();
-
-	
-		JOptionPane.showMessageDialog(null, "Bienvenido a la Mineria Minashi :)");
-
-		String[] acciones = { "Login", "Registrar", "Salir" };
-        int menu = 0;
-        
-        do {
-            menu = JOptionPane.showOptionDialog(null, "Bienvenido", null, 0, 0, null, acciones, acciones[0]);
-
-            switch (menu) {
-                case 0:
-                	 Usuario intentoLogin = new Usuario();
-                	    intentoLogin.setEmail(JOptionPane.showInputDialog("Ingrese email"));
-                	    intentoLogin.setContrasenia(JOptionPane.showInputDialog("Ingrese contraseña"));
-
-                	    if (intentoLogin.login()) {
-                	        Usuario usuarioLogueado = controller.login(intentoLogin.getEmail(), intentoLogin.getContrasenia());
-
-                	        if (usuarioLogueado != null) {
-                	            JOptionPane.showMessageDialog(null, "Bienvenido " + usuarioLogueado.getTipo() + " " + usuarioLogueado.getNombre());
-                	        } else {
-                	            JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
-                	        }
-                	    }
-                             	    
-                	    
-//                    Usuario usuario = controller.login(nombre, contrasenia);
-//                    if (usuario != null) {
-//                        if (usuario instanceof Cliente) {
-//                            JOptionPane.showMessageDialog(null, "Bienvenido Cliente " + usuario.getNombre());
-//                        } else if (usuario instanceof Operador) {
-//                            JOptionPane.showMessageDialog(null, "Bienvenido Operador " + usuario.getNombre());
-//                        } else if (usuario instanceof Encargado_Venta) {
-//                            JOptionPane.showMessageDialog(null, "Bienvenido Encargado de venta " + usuario.getNombre());
-//                        }
-//                    } else {
-//                        JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
-//                    }
-                	    
-                    break;
-
-                case 1:  // REGISTRO (solo clientes)
-                    
-            }
-        } while (menu != 2);
-		
-		
+		ControllerUsuario controller = new ControllerUsuario();
+//
+//	
+//		JOptionPane.showMessageDialog(null, "Bienvenido a la Mineria Minashi :)");
+//
+//		String[] acciones = { "Login", "Registrar", "Salir" };
+//        int menu = 0;
+//        
+//        do {
+//            menu = JOptionPane.showOptionDialog(null, "Bienvenido", null, 0, 0, null, acciones, acciones[0]);
+//
+//            switch (menu) {
+//                case 0:
+//                	 Usuario intentoLogin = new Usuario();
+//                	    intentoLogin.setEmail(JOptionPane.showInputDialog("Ingrese email"));
+//                	    intentoLogin.setContrasenia(JOptionPane.showInputDialog("Ingrese contraseña"));
+//
+//                	    if (intentoLogin.login()) {
+//                	        Usuario usuarioLogueado = controller.login(intentoLogin.getEmail(), intentoLogin.getContrasenia());
+//
+//                	        if (usuarioLogueado != null) {
+//                	            JOptionPane.showMessageDialog(null, "Bienvenido " + usuarioLogueado.getTipo() + " " + usuarioLogueado.getNombre());
+//                	        } else {
+//                	            JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
+//                	        }
+//                	    }
+//                             	    
+//         
+//                	    
+//                    break;
+//
+//                case 1:  // REGISTRO (solo clientes)
+//                	
+//                	Usuario nuevoUsuario = new Cliente();
+//                    nuevoUsuario.setNombre(JOptionPane.showInputDialog("Ingrese nombre"));
+//                    nuevoUsuario.setApellido(JOptionPane.showInputDialog("Ingrese apellido"));
+//                    nuevoUsuario.setEmail(JOptionPane.showInputDialog("Ingrese email"));
+//                    nuevoUsuario.setContrasenia(JOptionPane.showInputDialog("Ingrese contraseña"));
+//                    nuevoUsuario.setTipo("cliente");
+//
+////FALTA REGISTRAR QUE ESTA EN DISCORD                    nuevoUsuario.registrarUsuario();
+//                    break;
+//
+////                	
+//            }
+//        } while (menu != 2);
+//		
+//		
 	}
 }

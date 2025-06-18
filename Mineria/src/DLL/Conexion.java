@@ -2,8 +2,6 @@ package DLL;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import javax.swing.JOptionPane;
-
 import com.mysql.jdbc.Connection;
 
 public class Conexion {
