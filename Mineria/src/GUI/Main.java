@@ -26,34 +26,34 @@ public class Main {
 
             switch (menu) {
                 case 0:
-                    String nombre = "";
-                    while (nombre.isEmpty()) {
-                        nombre = JOptionPane.showInputDialog("Ingrese email");
-                        if (nombre.isEmpty()) {
-                            JOptionPane.showMessageDialog(null, "Incorrecto");
-                        }
-                    }
+                	 Usuario intentoLogin = new Usuario();
+                	    intentoLogin.setEmail(JOptionPane.showInputDialog("Ingrese email"));
+                	    intentoLogin.setContrasenia(JOptionPane.showInputDialog("Ingrese contraseña"));
 
-                    String contrasenia = "";
-                    while (contrasenia.isEmpty()) {
-                        contrasenia = JOptionPane.showInputDialog("Ingrese contraseña");
-                        if (contrasenia.isEmpty()) {
-                            JOptionPane.showMessageDialog(null, "Incorrecto");
-                        }
-                    }
+                	    if (intentoLogin.login()) {
+                	        Usuario usuarioLogueado = controller.login(intentoLogin.getEmail(), intentoLogin.getContrasenia());
 
-                    Usuario usuario = controller.login(nombre, contrasenia);
-                    if (usuario != null) {
-                        if (usuario instanceof Cliente) {
-                            JOptionPane.showMessageDialog(null, "Bienvenido Cliente " + usuario.getNombre());
-                        } else if (usuario instanceof Operador) {
-                            JOptionPane.showMessageDialog(null, "Bienvenido Operador " + usuario.getNombre());
-                        } else if (usuario instanceof Encargado_Venta) {
-                            JOptionPane.showMessageDialog(null, "Bienvenido Encargado de venta " + usuario.getNombre());
-                        }
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
-                    }
+                	        if (usuarioLogueado != null) {
+                	            JOptionPane.showMessageDialog(null, "Bienvenido " + usuarioLogueado.getTipo() + " " + usuarioLogueado.getNombre());
+                	        } else {
+                	            JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
+                	        }
+                	    }
+                             	    
+                	    
+//                    Usuario usuario = controller.login(nombre, contrasenia);
+//                    if (usuario != null) {
+//                        if (usuario instanceof Cliente) {
+//                            JOptionPane.showMessageDialog(null, "Bienvenido Cliente " + usuario.getNombre());
+//                        } else if (usuario instanceof Operador) {
+//                            JOptionPane.showMessageDialog(null, "Bienvenido Operador " + usuario.getNombre());
+//                        } else if (usuario instanceof Encargado_Venta) {
+//                            JOptionPane.showMessageDialog(null, "Bienvenido Encargado de venta " + usuario.getNombre());
+//                        }
+//                    } else {
+//                        JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
+//                    }
+                	    
                     break;
 
                 case 1:  // REGISTRO (solo clientes)

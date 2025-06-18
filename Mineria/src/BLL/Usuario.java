@@ -62,14 +62,16 @@ public class Usuario implements Encriptador {
                ", tipo=" + tipo + ", email=" + email + ", Contrasenia=" + Contrasenia + "]";
     }
 
-    public Usuario login(String email, String contrasenia) {
-        if (email.isEmpty() || contrasenia.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Correo o contraseña vacíos");
-            return null;
-        } else {
-            ControllerUsuario controller = new ControllerUsuario();
-            return controller.login(email, contrasenia);
+    public boolean login() {
+        if (this.email == null || this.email.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "El correo no puede estar vacío");
+            return false;
         }
+        if (this.Contrasenia == null || this.Contrasenia.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "La contraseña no puede estar vacía");
+            return false;
+        }
+        return true;
     }
 
     public void agregarUsuario() {

@@ -40,7 +40,7 @@ public class PantallaPrincipal extends JFrame {
 	 */
 	public PantallaPrincipal() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 421, 324);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -58,11 +58,15 @@ public class PantallaPrincipal extends JFrame {
 		PaginaPrincipal.setText("Mineria Minashi");
 		contentPane.add(PaginaPrincipal);
 		PaginaPrincipal.setColumns(10);
+		
+		
 		JButton btnComprar = new JButton("comprar");
 		btnComprar.setBounds(34, 152, 89, 23);
 		contentPane.add(btnComprar);
 		int cliente = (int)(Math.random()*20);
+		
 		JOptionPane.showMessageDialog(null, cliente==0?"Es admin":"Es cliente");
+		
 		if (cliente==0) {
 			//admin
 			btnComprar.setVisible(false);

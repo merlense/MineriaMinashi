@@ -21,7 +21,6 @@ public class Conexion {
 			System.out.println("Se conectó");
 		} catch (SQLException e) {
 			System.out.println("No se conectó");
-
 		}
 	}
 	public static Conexion getInstance() {
