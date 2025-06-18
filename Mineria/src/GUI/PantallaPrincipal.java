@@ -12,12 +12,18 @@ import javax.swing.JButton;
 import javax.swing.JTextArea;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JPasswordField;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class PantallaPrincipal extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField PaginaPrincipal;
+	private JTextField InputEmail;
+	private JPasswordField passwordField;
 
 	/**
 	 * Launch the application.
@@ -47,44 +53,64 @@ public class PantallaPrincipal extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JTextArea textArea = new JTextArea();
-		textArea.setBounds(134, 12, 5, 22);
-		contentPane.add(textArea);
+		JLabel CorreoElectronico = new JLabel("Ingrese su correo electronico:");
+		CorreoElectronico.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		CorreoElectronico.setBounds(11, 68, 219, 22);
+		contentPane.add(CorreoElectronico);
 		
-		PaginaPrincipal = new JTextField();
-		PaginaPrincipal.setBounds(134, 28, 156, 26);
-		PaginaPrincipal.setHorizontalAlignment(SwingConstants.CENTER);
-		PaginaPrincipal.setFont(new Font("Tahoma", Font.BOLD, 16));
-		PaginaPrincipal.setText("Mineria Minashi");
-		contentPane.add(PaginaPrincipal);
-		PaginaPrincipal.setColumns(10);
+		InputEmail = new JTextField();
+		InputEmail.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		InputEmail.setBounds(11, 95, 219, 30);
+		contentPane.add(InputEmail);
+		InputEmail.setColumns(10);
 		
+		JLabel Contrasenia = new JLabel("Ingrese su contraseña:");
+		Contrasenia.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		Contrasenia.setBounds(11, 146, 174, 13);
+		contentPane.add(Contrasenia);
 		
-		JButton btnComprar = new JButton("comprar");
-		btnComprar.setBounds(34, 152, 89, 23);
-		contentPane.add(btnComprar);
+		JLabel Mineria = new JLabel("Mineria minashi");
+		Mineria.setHorizontalAlignment(SwingConstants.CENTER);
+		Mineria.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		Mineria.setBounds(116, 24, 160, 22);
+		contentPane.add(Mineria);
+		
+		passwordField = new JPasswordField();
+		passwordField.setBounds(10, 169, 217, 30);
+		contentPane.add(passwordField);
+	
+		JButton LoginBtn = new JButton("Login");
+		LoginBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				// Aca se pondria la accion del login
+				
+				
+			}
+		});
+		LoginBtn.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		LoginBtn.setBounds(9, 214, 106, 28);
+		contentPane.add(LoginBtn);
+		
+		JButton RegistroBtn = new JButton("Registrate");
+		RegistroBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				// Aca se pondria la accion del registro
+				
+				
+			}
+		});
+		RegistroBtn.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		RegistroBtn.setBounds(120, 214, 106, 28);
+		contentPane.add(RegistroBtn);
 		int cliente = (int)(Math.random()*20);
 		
-		JOptionPane.showMessageDialog(null, cliente==0?"Es admin":"Es cliente");
+	//	JOptionPane.showMessageDialog(null, cliente==0?"Es admin":"Es cliente");
 		
-		if (cliente==0) {
-			//admin
-			btnComprar.setVisible(false);
-			
-			HomeAdmin admin = new HomeAdmin();
-			admin.setVisible(true);
-		}else {
-			//cliente
-			btnComprar.setVisible(true);
-			HomeCliente pantCliente = new HomeCliente();
-			pantCliente.setVisible(true);
 
 		}
 		
-		JLabel lblNewLabel = new JLabel("New label");
-		lblNewLabel.setBounds(54, 36, 46, 14);
-		contentPane.add(lblNewLabel);
-		
 		
 	}
-}
+

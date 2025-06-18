@@ -6,6 +6,11 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/agust/Documents/GitHub/MineriaMinashi/Mineria/mysql-connector-java-5.1.13.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/aldan/OneDrive/Documentos/GitHub/MineriaMinashi/MineriaMinashi/MineriaMinashi/Mineria/mysql-connector-java-5.1.13.jar"/>
 	<classpathentry kind="output" path="Mineria/bin"/>
 </classpath>
