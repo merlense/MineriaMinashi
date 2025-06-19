@@ -7,9 +7,11 @@ public class Cliente extends Usuario{
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Cliente() {
-		
-	}
+	 public Cliente() {
+	        super();
+	        this.tipo = "Cliente";
+	    }
+
 
 	@Override
 	public String toString() {

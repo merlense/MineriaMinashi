@@ -83,15 +83,58 @@ public class Usuario implements Encriptador {
     }
 
     public void agregarUsuario() {
-        if (this.getNombre().isEmpty() || this.getContrasenia().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Nombre o contraseña no pueden estar vacíos");
-        } else {
-            ControllerUsuario controller = new ControllerUsuario();
-            controller.agregarUsuario(this);
-        }
+    	if (this.getNombre().isEmpty() || this.getContrasenia().isEmpty()) {
+    		JOptionPane.showMessageDialog(null, "Nombre o contraseña no pueden estar vacíos");
+    	} else {
+    		ControllerUsuario controller = new ControllerUsuario();
+    		controller.agregarUsuario(this);
+    	}
     }
     
-   
+    public boolean validarRegistro() {
+        if (
+            (this.nombre == null || this.nombre.trim().isEmpty()) &&
+            (this.apellido == null || this.apellido.trim().isEmpty()) &&
+            (this.email == null || this.email.trim().isEmpty()) &&
+            (this.Contrasenia == null || this.Contrasenia.trim().isEmpty())
+        ) {
+            JOptionPane.showMessageDialog(null, "Los campos no pueden estar vacíos");
+            return false;
+        } else if (this.nombre == null || this.nombre.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Nombre inválido");
+            return false;
+        } else if (this.apellido == null || this.apellido.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Apellido inválido");
+            return false;
+        } else if (this.email == null || this.email.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Email inválido");
+            return false;
+        } else if (this.Contrasenia == null || this.Contrasenia.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Contraseña inválida");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    
+    public boolean registrarUsuario() {
+        if (!validarRegistro()) {
+            return false;
+        }
+
+        ControllerUsuario controller = new ControllerUsuario();
+
+        if (controller.existeEmail(this.email)) {
+            JOptionPane.showMessageDialog(null, "El email ya está registrado");
+            return false;
+        }
+
+        controller.agregarUsuario(this);
+        JOptionPane.showMessageDialog(null, "Usuario registrado correctamente");
+        return true;
+    }
+
     
 }
 

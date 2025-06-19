@@ -9,14 +9,12 @@ import javax.swing.JTextField;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
-import javax.swing.JTextArea;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JPasswordField;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.ImageIcon;
 
 public class PantallaPrincipal extends JFrame {
 
@@ -25,9 +23,6 @@ public class PantallaPrincipal extends JFrame {
 	private JTextField InputEmail;
 	private JPasswordField passwordField;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -41,9 +36,6 @@ public class PantallaPrincipal extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public PantallaPrincipal() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 421, 324);
@@ -55,28 +47,28 @@ public class PantallaPrincipal extends JFrame {
 		
 		JLabel CorreoElectronico = new JLabel("Ingrese su correo electronico:");
 		CorreoElectronico.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		CorreoElectronico.setBounds(11, 68, 219, 22);
+		CorreoElectronico.setBounds(24, 62, 219, 22);
 		contentPane.add(CorreoElectronico);
 		
 		InputEmail = new JTextField();
 		InputEmail.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		InputEmail.setBounds(11, 95, 219, 30);
+		InputEmail.setBounds(24, 89, 219, 30);
 		contentPane.add(InputEmail);
 		InputEmail.setColumns(10);
 		
 		JLabel Contrasenia = new JLabel("Ingrese su contraseña:");
 		Contrasenia.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		Contrasenia.setBounds(11, 146, 174, 13);
+		Contrasenia.setBounds(24, 140, 174, 13);
 		contentPane.add(Contrasenia);
 		
 		JLabel Mineria = new JLabel("Mineria minashi");
 		Mineria.setHorizontalAlignment(SwingConstants.CENTER);
-		Mineria.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		Mineria.setBounds(116, 24, 160, 22);
+		Mineria.setFont(new Font("Tahoma", Font.PLAIN, 22));
+		Mineria.setBounds(120, 23, 160, 22);
 		contentPane.add(Mineria);
 		
 		passwordField = new JPasswordField();
-		passwordField.setBounds(10, 169, 217, 30);
+		passwordField.setBounds(23, 163, 217, 30);
 		contentPane.add(passwordField);
 	
 		JButton LoginBtn = new JButton("Login");
@@ -106,37 +98,32 @@ public class PantallaPrincipal extends JFrame {
 
 		        if (usuario != null) {
 		            JOptionPane.showMessageDialog(null, "Bienvenido " + usuario.getTipo() + " " + usuario.getNombre());
-		            // Acá podrías abrir una nueva ventana dependiendo del tipo de usuario
+		            // Aquí podrías abrir otra ventana según el tipo de usuario
 		        } else {
 		            JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
 		        }
 		    }
 		});
 
-		
 		LoginBtn.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		LoginBtn.setBounds(9, 214, 106, 28);
+		LoginBtn.setBounds(86, 223, 114, 40);
 		contentPane.add(LoginBtn);
 		
 		JButton RegistroBtn = new JButton("Registrate");
 		RegistroBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				// Aca se pondria la accion del registro
-				
-				
+				// Abrir ventana de registro
+				MenuRegistro registro = new MenuRegistro();
+				registro.setVisible(true);
 			}
 		});
 		RegistroBtn.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		RegistroBtn.setBounds(120, 214, 106, 28);
+		RegistroBtn.setBounds(209, 223, 114, 40);
 		contentPane.add(RegistroBtn);
-		int cliente = (int)(Math.random()*20);
 		
-	//	JOptionPane.showMessageDialog(null, cliente==0?"Es admin":"Es cliente");
-		
-
-		}
-		
-		
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon(PantallaPrincipal.class.getResource("/IMG/picoDiamante.png")));
+		lblNewLabel.setBounds(269, 80, 114, 113);
+		contentPane.add(lblNewLabel);
 	}
-
+}
