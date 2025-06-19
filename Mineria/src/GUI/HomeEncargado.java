@@ -58,7 +58,7 @@ public class HomeEncargado extends JFrame {
 				// ACCION REVISAR STOCK
 			}
 		});
-		RevisarStockENBT.setBounds(233, 104, 145, 52);
+		RevisarStockENBT.setBounds(232, 104, 145, 52);
 		RevisarStockENBT.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		contentPane.add(RevisarStockENBT);
 		

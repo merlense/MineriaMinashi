@@ -6,21 +6,20 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.LinkedList;
 import BLL.Mineral;
-import BLL.Usuario;
 import DLL.ControllerMineral;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class CatalogoMinerales extends JFrame {
+public class RealizarPedido extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
 
-    public CatalogoMinerales(Usuario  usuario) {
+    public RealizarPedido() {
     	setIconImage(Toolkit.getDefaultToolkit().getImage(CatalogoMinerales.class.getResource("/IMG/diamante-super-chico.png")));
         setTitle("Catálogo de Minerales");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setBounds(100, 100, 753, 400);
+        setBounds(100, 100, 600, 400);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
         setContentPane(contentPane);
@@ -50,11 +49,11 @@ public class CatalogoMinerales extends JFrame {
         contentPane.setLayout(null);
 
         JScrollPane scrollPane = new JScrollPane(tabla);
-        scrollPane.setBounds(10, 55, 717, 203);
+        scrollPane.setBounds(10, 56, 566, 210);
         contentPane.add(scrollPane);
         
         JButton btnNewButton = new JButton("SALIR");
-        btnNewButton.setBounds(573, 320, 154, 30);
+        btnNewButton.setBounds(398, 276, 154, 30);
         contentPane.add(btnNewButton);
         
         JButton btnAgregarAlCarrito = new JButton("AGREGAR AL CARRITO");
@@ -62,42 +61,13 @@ public class CatalogoMinerales extends JFrame {
         	public void actionPerformed(ActionEvent arg0) {
         	}
         });
-        btnAgregarAlCarrito.setBounds(10, 269, 201, 30);
+        btnAgregarAlCarrito.setBounds(36, 276, 201, 30);
         contentPane.add(btnAgregarAlCarrito);
         
-        JLabel lblNewLabel = new JLabel("CATALOGO DE MINERALES");
+        JLabel lblNewLabel = new JLabel("CATALOGO");
         lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
         lblNewLabel.setFont(new Font("Segoe UI Semibold", Font.BOLD, 22));
-        lblNewLabel.setBounds(204, 9, 320, 35);
+        lblNewLabel.setBounds(215, 10, 145, 35);
         contentPane.add(lblNewLabel);
-        
-        JButton btnNewButton_1 = new JButton("FINALIZAR PEDIDO");
-        btnNewButton_1.setBounds(223, 269, 137, 30);
-        contentPane.add(btnNewButton_1);
-        
-        JButton btnNewButton_3 = new JButton("FILTRO");
-        btnNewButton_3.setBounds(626, 269, 89, 30);
-        contentPane.add(btnNewButton_3);
-        
-        
-        
-//        if (usuario.getTipo().equals("Cliente")) {
-//        	btnAgregarAlCarrito.setVisible(true);
-//
-//		} else {
-//   		btnAgregarAlCarrito.setVisible(false);
-//
-//		}
-////        JCheckBox chckbxNewCheckBox = new JCheckBox("Ocultar/Mostrar");
-////        chckbxNewCheckBox.setBounds(23, 331, 138, 23);
-////        contentPane.add(chckbxNewCheckBox);
-////        chckbxNewCheckBox.addActionListener(e->{
-////        	if (chckbxNewCheckBox.isSelected()) {
-////        		btnAgregarAlCarrito.setVisible(true);
-////			} else {
-////        		btnAgregarAlCarrito.setVisible(false);
-////
-////			}
-////        });
     }
 }

@@ -103,7 +103,7 @@ public class PantallaPrincipal extends JFrame {
 
 		            switch (usuario.getTipo().toLowerCase()) {
 		                case "cliente":
-		                    new HomeCliente().setVisible(true);
+		                    new HomeCliente(usuario).setVisible(true);
 		                    break;
 		                case "operador":
 		                    new HomeOperador().setVisible(true);

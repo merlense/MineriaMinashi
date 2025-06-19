@@ -5,6 +5,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import BLL.Usuario;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
@@ -20,7 +23,7 @@ public class HomeCliente extends JFrame {
 	private JPanel contentPane;
 
 	
-	public HomeCliente() {
+	public HomeCliente(Usuario  usuario) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 658, 301);
 		contentPane = new JPanel();
@@ -39,42 +42,22 @@ public class HomeCliente extends JFrame {
 		CatalogoCLBT.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		CatalogoCLBT.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-		        CatalogoMinerales catalogo = new CatalogoMinerales();
+		        CatalogoMinerales catalogo = new CatalogoMinerales(usuario);
 		        catalogo.setVisible(true);
 		    }
 		});
 		
-		CatalogoCLBT.setBounds(26, 118, 131, 47);
+		CatalogoCLBT.setBounds(164, 118, 131, 47);
 		contentPane.add(CatalogoCLBT);
 		
-		JButton HacerPedidoCLBT = new JButton("Hacer pedido");
-		HacerPedidoCLBT.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// ACCION HACER PEDIDO
-			}
-		});
-		HacerPedidoCLBT.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		HacerPedidoCLBT.setBounds(167, 118, 131, 47);
-		contentPane.add(HacerPedidoCLBT);
-		
-		JButton FinalizarPedidoCLBT = new JButton("Finalizar pedido");
-		FinalizarPedidoCLBT.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// ACCION FINALIZAR PEDIDO
-			}
-		});
-		FinalizarPedidoCLBT.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		FinalizarPedidoCLBT.setBounds(312, 118, 151, 47);
-		contentPane.add(FinalizarPedidoCLBT);
-		
-		JButton VerEstadoPedidoCLBT_1 = new JButton("Ver pedido");
+		JButton VerEstadoPedidoCLBT_1 = new JButton("Ver estado");
 		VerEstadoPedidoCLBT_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// ACCION VER PEDIDO
 			}
 		});
 		VerEstadoPedidoCLBT_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		VerEstadoPedidoCLBT_1.setBounds(481, 118, 131, 47);
+		VerEstadoPedidoCLBT_1.setBounds(336, 118, 146, 47);
 		contentPane.add(VerEstadoPedidoCLBT_1);
 		
 		JButton SalirCLBT = new JButton("Salir");
@@ -84,7 +67,7 @@ public class HomeCliente extends JFrame {
 			}
 		});
 		SalirCLBT.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		SalirCLBT.setBounds(257, 189, 131, 47);
+		SalirCLBT.setBounds(248, 177, 131, 47);
 		contentPane.add(SalirCLBT);
 		
 		JLabel lblNewLabel = new JLabel("");
