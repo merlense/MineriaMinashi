@@ -100,10 +100,18 @@ public class MenuRegistro extends JFrame {
 				nuevoUsuario.setTipo("Cliente");
 
 				if (nuevoUsuario.registrarUsuario()) {
-					dispose(); // cerrar ventana actual si se desea
+					JOptionPane.showMessageDialog(null, "¡Registro exitoso! Inicie sesión.");
+					
+					PantallaPrincipal login = new PantallaPrincipal(); // volver al login
+					login.setVisible(true);
+					
+					dispose(); // cerrar esta ventana (registro)
 				}
 			}
+			
 		});
+		
+		
 
 		RegistrarBtn.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		RegistrarBtn.setBounds(160, 342, 125, 48);

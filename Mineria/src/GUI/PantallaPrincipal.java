@@ -132,6 +132,7 @@ public class PantallaPrincipal extends JFrame {
 				// Abrir ventana de registro
 				MenuRegistro registro = new MenuRegistro();
 				registro.setVisible(true);
+				dispose();
 			}
 		});
 		RegistroBtn.setFont(new Font("Tahoma", Font.PLAIN, 14));
