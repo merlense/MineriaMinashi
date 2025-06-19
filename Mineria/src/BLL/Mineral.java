@@ -2,33 +2,63 @@ package BLL;
 
 public class Mineral {
 
-	private String nombre;
-	private int cantidad;
+	private int idMineria;
+	private String tipo;
+	private  int unidades;
+	private double peso;
+	private double pureza;
 	private double precio;
-	private  int pureza;
+	private int descuento;
 	
-	public Mineral(String nombre, int cantidad, double precio, int pureza) {
+	public Mineral(int idMineria, String tipo, int unidades, double peso, double pureza, double precio, int descuento) {
 		super();
-		this.nombre = nombre;
-		this.cantidad = cantidad;
-		this.precio = precio;
+		this.idMineria = idMineria;
+		this.tipo = tipo;
+		this.unidades = unidades;
+		this.peso = peso;
 		this.pureza = pureza;
+		this.precio = precio;
+		this.descuento = descuento;
 	}
 
-	public String getNombre() {
-		return nombre;
+	public int getIdMineria() {
+		return idMineria;
 	}
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	public void setIdMineria(int idMineria) {
+		this.idMineria = idMineria;
 	}
 
-	public int getCantidad() {
-		return cantidad;
+	public String getTipo() {
+		return tipo;
 	}
 
-	public void setCantidad(int cantidad) {
-		this.cantidad = cantidad;
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+
+	public int getUnidades() {
+		return unidades;
+	}
+
+	public void setUnidades(int unidades) {
+		this.unidades = unidades;
+	}
+
+	public double getPeso() {
+		return peso;
+	}
+
+	public void setPeso(double peso) {
+		this.peso = peso;
+	}
+
+	public double getPureza() {
+		return pureza;
+	}
+
+	public void setPureza(double pureza) {
+		this.pureza = pureza;
 	}
 
 	public double getPrecio() {
@@ -39,13 +69,19 @@ public class Mineral {
 		this.precio = precio;
 	}
 
-	public int getPureza() {
-		return pureza;
+	public int getDescuento() {
+		return descuento;
 	}
 
-	public void setPureza(int pureza) {
-		this.pureza = pureza;
-	}              
+	public void setDescuento(int descuento) {
+		this.descuento = descuento;
+	}
+
+	@Override
+	public String toString() {
+		return "Mineral [idMineria=" + idMineria + ", tipo=" + tipo + ", unidades=" + unidades + ", peso=" + peso
+				+ ", pureza=" + pureza + ", precio=" + precio + ", descuento=" + descuento + "]";
+	}
 	
 	
 	

@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JToggleButton;
+import javax.swing.ImageIcon;
 
 public class HomeCliente extends JFrame {
 
@@ -37,10 +38,12 @@ public class HomeCliente extends JFrame {
 		JButton CatalogoCLBT = new JButton("Ver catalogo");
 		CatalogoCLBT.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		CatalogoCLBT.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// ACCION CATALOGO
-			}
+		    public void actionPerformed(ActionEvent e) {
+		        CatalogoMinerales catalogo = new CatalogoMinerales();
+		        catalogo.setVisible(true);
+		    }
 		});
+		
 		CatalogoCLBT.setBounds(26, 118, 131, 47);
 		contentPane.add(CatalogoCLBT);
 		
@@ -83,5 +86,10 @@ public class HomeCliente extends JFrame {
 		SalirCLBT.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		SalirCLBT.setBounds(257, 189, 131, 47);
 		contentPane.add(SalirCLBT);
+		
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon(HomeCliente.class.getResource("/IMG/diamante-super-chico.png")));
+		lblNewLabel.setBounds(156, 26, 48, 60);
+		contentPane.add(lblNewLabel);
 	}
 }

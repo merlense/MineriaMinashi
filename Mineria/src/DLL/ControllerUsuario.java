@@ -15,7 +15,6 @@ public class ControllerUsuario {
     private Connection con;
 
     public ControllerUsuario() {
-        // Cada vez que creás un ControllerUsuario, se guarda la conexión
         this.con = Conexion.getInstance().getConnection();
     }
 

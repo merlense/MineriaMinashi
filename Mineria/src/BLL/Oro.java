@@ -1,8 +1,8 @@
 package BLL;
 public class Oro extends Mineral{
 
-	public Oro(String nombre, int cantidad, double precio, int pureza) {
-		super(nombre, cantidad, precio, pureza);
+	public Oro(int idMineria, String tipo, int unidades, double peso, double pureza, double precio, int descuento) {
+		super(idMineria, tipo, unidades, peso, pureza, precio, descuento);
 	}
 
 }
