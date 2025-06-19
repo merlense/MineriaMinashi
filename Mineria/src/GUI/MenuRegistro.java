@@ -106,7 +106,7 @@ public class MenuRegistro extends JFrame {
 		});
 
 		RegistrarBtn.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		RegistrarBtn.setBounds(160, 348, 125, 48);
+		RegistrarBtn.setBounds(160, 342, 125, 48);
 		contentPane.add(RegistrarBtn);
 		
 		JLabel lblNewLabel = new JLabel("");
