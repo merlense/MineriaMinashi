@@ -61,10 +61,10 @@ public class PantallaPrincipal extends JFrame {
 		Contrasenia.setBounds(24, 140, 174, 13);
 		contentPane.add(Contrasenia);
 		
-		JLabel Mineria = new JLabel("Mineria minashi");
+		JLabel Mineria = new JLabel("MINERIA MINASHI");
 		Mineria.setHorizontalAlignment(SwingConstants.CENTER);
-		Mineria.setFont(new Font("Tahoma", Font.PLAIN, 22));
-		Mineria.setBounds(120, 23, 160, 22);
+		Mineria.setFont(new Font("Segoe UI Semibold", Font.BOLD, 22));
+		Mineria.setBounds(106, 30, 203, 22);
 		contentPane.add(Mineria);
 		
 		passwordField = new JPasswordField();
@@ -72,7 +72,7 @@ public class PantallaPrincipal extends JFrame {
 		contentPane.add(passwordField);
 	
 		JButton LoginBtn = new JButton("Login");
-		
+
 		LoginBtn.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		        String email = InputEmail.getText().trim();
@@ -98,7 +98,23 @@ public class PantallaPrincipal extends JFrame {
 
 		        if (usuario != null) {
 		            JOptionPane.showMessageDialog(null, "Bienvenido " + usuario.getTipo() + " " + usuario.getNombre());
-		            // Aquí podrías abrir otra ventana según el tipo de usuario
+
+		            dispose(); // Cierra la ventana actual (PantallaPrincipal)
+
+		            switch (usuario.getTipo().toLowerCase()) {
+		                case "cliente":
+		                    new HomeCliente().setVisible(true);
+		                    break;
+		                case "operador":
+		                    new HomeOperador().setVisible(true);
+		                    break;
+		                case "encargado":
+		                    new HomeEncargado().setVisible(true);
+		                    break;
+		                default:
+		                    JOptionPane.showMessageDialog(null, "Tipo de usuario no reconocido.");
+		                    break;
+		            }
 		        } else {
 		            JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
 		        }
@@ -108,6 +124,7 @@ public class PantallaPrincipal extends JFrame {
 		LoginBtn.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		LoginBtn.setBounds(86, 223, 114, 40);
 		contentPane.add(LoginBtn);
+
 		
 		JButton RegistroBtn = new JButton("Registrate");
 		RegistroBtn.addActionListener(new ActionListener() {
@@ -115,7 +132,6 @@ public class PantallaPrincipal extends JFrame {
 				// Abrir ventana de registro
 				MenuRegistro registro = new MenuRegistro();
 				registro.setVisible(true);
-				dispose();
 			}
 		});
 		RegistroBtn.setFont(new Font("Tahoma", Font.PLAIN, 14));

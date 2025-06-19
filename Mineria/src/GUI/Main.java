@@ -15,7 +15,7 @@ public class Main {
 		Conexion.getInstance();
 		ControllerUsuario controller = new ControllerUsuario();
 		
-		GUI.PantallaPrincipal.main(args); 
+		GUI.PantallaPrincipal.main(args);
 		
 	}
 }
