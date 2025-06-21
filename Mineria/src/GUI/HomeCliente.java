@@ -35,7 +35,7 @@ public class HomeCliente extends JFrame {
 		JLabel HomeTituloCL = new JLabel("MINERIA MINASHI");
 		HomeTituloCL.setHorizontalAlignment(SwingConstants.CENTER);
 		HomeTituloCL.setFont(new Font("Segoe UI Semibold", Font.BOLD, 22));
-		HomeTituloCL.setBounds(220, 39, 192, 47);
+		HomeTituloCL.setBounds(214, 39, 196, 47);
 		contentPane.add(HomeTituloCL);
 		
 		JButton CatalogoCLBT = new JButton("Ver catalogo");
@@ -74,5 +74,10 @@ public class HomeCliente extends JFrame {
 		lblNewLabel.setIcon(new ImageIcon(HomeCliente.class.getResource("/IMG/diamante-super-chico.png")));
 		lblNewLabel.setBounds(156, 26, 48, 60);
 		contentPane.add(lblNewLabel);
+		
+		JLabel lblNewLabel_1 = new JLabel("");
+		lblNewLabel_1.setIcon(new ImageIcon(HomeCliente.class.getResource("/IMG/diamante-super-chico.png")));
+		lblNewLabel_1.setBounds(420, 26, 48, 60);
+		contentPane.add(lblNewLabel_1);
 	}
 }

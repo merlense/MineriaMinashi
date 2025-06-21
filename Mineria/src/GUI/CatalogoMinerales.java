@@ -15,6 +15,8 @@ public class CatalogoMinerales extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
+    private Mineral mineralSeleccionado = null;
+
 
     public CatalogoMinerales(Usuario  usuario) {
     	setIconImage(Toolkit.getDefaultToolkit().getImage(CatalogoMinerales.class.getResource("/IMG/diamante-super-chico.png")));
@@ -27,8 +29,12 @@ public class CatalogoMinerales extends JFrame {
 
         String[] columnas = {"Nombre", "Cantidad", "Peso", "Precio", "Pureza", "Descuento"};
 
-        DefaultTableModel modelo = new DefaultTableModel(columnas, 0);
-
+        DefaultTableModel modelo = new DefaultTableModel(columnas, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; 
+            }
+        };
         ControllerMineral controlador = new ControllerMineral();
         LinkedList<Mineral> minerales = controlador.mostrarMinerales();
 
@@ -45,9 +51,18 @@ public class CatalogoMinerales extends JFrame {
         }
 
         JTable tabla = new JTable(modelo);
-        tabla.setEnabled(false); 
+        tabla.setRowSelectionAllowed(true);
         tabla.getTableHeader().setReorderingAllowed(false); 
         contentPane.setLayout(null);
+        
+        tabla.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                int fila = tabla.getSelectedRow();
+                if (fila != -1) {
+                    mineralSeleccionado = minerales.get(fila); 
+                }
+            }
+        });          
 
         JScrollPane scrollPane = new JScrollPane(tabla);
         scrollPane.setBounds(10, 55, 717, 203);
@@ -62,6 +77,19 @@ public class CatalogoMinerales extends JFrame {
         	public void actionPerformed(ActionEvent arg0) {
         	}
         });
+        
+        btnAgregarAlCarrito.addActionListener(e -> {
+            if (mineralSeleccionado != null) {
+                JOptionPane.showMessageDialog(null, "Agregado al carrito: " + mineralSeleccionado.getTipo());               
+            } else {
+                JOptionPane.showMessageDialog(null, "Seleccione un mineral primero");
+            }
+        });
+
+        
+   
+        
+        
         btnAgregarAlCarrito.setBounds(10, 269, 201, 30);
         contentPane.add(btnAgregarAlCarrito);
         
