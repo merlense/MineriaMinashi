@@ -8,6 +8,8 @@ import java.util.LinkedList;
 import BLL.Mineral;
 import BLL.Usuario;
 import DLL.ControllerMineral;
+import DLL.ControllerPedido;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -16,6 +18,8 @@ public class CatalogoMinerales extends JFrame {
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
     private Mineral mineralSeleccionado = null;
+    private LinkedList<Mineral> mineralesSeleccionados = new LinkedList<>();
+
 
 
     public CatalogoMinerales(Usuario  usuario) {
@@ -40,7 +44,7 @@ public class CatalogoMinerales extends JFrame {
 
         for (Mineral m : minerales) {
         	Object[] fila = {
-        		    m.getIdMineria(), // MOSTRÁS el ID
+        		    m.getIdMineria(), 
         		    m.getTipo(),
         		    m.getUnidades(),
         		    m.getPeso(),
@@ -55,6 +59,8 @@ public class CatalogoMinerales extends JFrame {
         tabla.setRowSelectionAllowed(true);
         tabla.getTableHeader().setReorderingAllowed(false); 
         contentPane.setLayout(null);
+        
+        
         
         tabla.getSelectionModel().addListSelectionListener(e -> {
         	int fila = tabla.getSelectedRow();
@@ -76,7 +82,7 @@ public class CatalogoMinerales extends JFrame {
         contentPane.add(scrollPane);
         
         JButton btnNewButton = new JButton("SALIR");
-        btnNewButton.setBounds(573, 320, 154, 30);
+        btnNewButton.setBounds(575, 323, 154, 30);
         contentPane.add(btnNewButton);
         
         JButton btnAgregarAlCarrito = new JButton("AGREGAR AL CARRITO");
@@ -87,29 +93,28 @@ public class CatalogoMinerales extends JFrame {
         
         btnAgregarAlCarrito.addActionListener(e -> {
             if (mineralSeleccionado != null) {
-                SeleccionarMineral ventana = new SeleccionarMineral();
+                SeleccionarMineral ventana = new SeleccionarMineral(usuario);
 
-                // Cargar datos en la ventana SeleccionarMineral
                 ventana.setDatosMineral(
-                	mineralSeleccionado.getIdMineria(),
+                    mineralSeleccionado.getIdMineria(),
                     mineralSeleccionado.getTipo(),
                     mineralSeleccionado.getUnidades(),
                     mineralSeleccionado.getPeso(),
                     mineralSeleccionado.getPrecio()
                 );
 
-                // PASO CLAVE: al finalizar, reabrir CatalogoMinerales
                 ventana.setOnFinalizar(() -> {
                     CatalogoMinerales nuevaVentana = new CatalogoMinerales(usuario);
                     nuevaVentana.setVisible(true);
                 });
 
                 ventana.setVisible(true);
-                dispose(); // Cierra esta ventana actual
+                dispose();
             } else {
                 JOptionPane.showMessageDialog(null, "Seleccione un mineral primero");
             }
         });
+
 
 
         
@@ -123,17 +128,43 @@ public class CatalogoMinerales extends JFrame {
         contentPane.add(lblNewLabel);
         
         JButton btnNewButton_1 = new JButton("FINALIZAR PEDIDO");
-        btnNewButton_1.setBounds(223, 269, 137, 30);
+        btnNewButton_1.setBounds(364, 268, 178, 30);
         contentPane.add(btnNewButton_1);
+        
+        btnNewButton_1.addActionListener(e -> {
+            ControllerPedido controllerPedido = new ControllerPedido();
+            int idPedido = controllerPedido.crearPedido(usuario.getId());
+            boolean finalizado = controllerPedido.finalizarPedido(idPedido);
+
+            if (finalizado) {
+                JOptionPane.showMessageDialog(null, "Pedido finalizado con éxito.");
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "No se pudo finalizar el pedido.");
+            }
+        });
+
         
         JButton btnNewButton_3 = new JButton("FILTRO");
         btnNewButton_3.setBounds(626, 269, 89, 30);
         contentPane.add(btnNewButton_3);
         
+        JButton btnResumenPedido = new JButton("RESUMEN PEDIDO");
+        btnResumenPedido.setBounds(221, 268, 133, 31);
+        contentPane.add(btnResumenPedido);
+        
+        btnResumenPedido.addActionListener(e -> {
+            resumenPedido resumen = new resumenPedido(usuario);
+            resumen.setVisible(true);
+        });
+
+        
     }
+    
+    
          
     private void recargarTabla(DefaultTableModel modelo) {
-        modelo.setRowCount(0); // Limpiar tabla
+        modelo.setRowCount(0); 
 
         ControllerMineral controlador = new ControllerMineral();
         LinkedList<Mineral> minerales = controlador.mostrarMinerales();
