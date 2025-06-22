@@ -131,10 +131,10 @@ public class ControllerPedido {
     public DefaultTableModel obtenerResumenPedido(int idPedido) {
         DefaultTableModel modelo = new DefaultTableModel();
         modelo.setColumnIdentifiers(new Object[] {
-            "ID Pedido", "Fecha Pedido", "ID Mineral", "Nombre Mineral", "Cantidad", "Precio Unitario", "Subtotal"
+            "ID Pedido", "Fecha Pedido", "ID Mineral", "Nombre Mineral", "Cantidad", "Precio Unitario", "Pureza", "Subtotal"
         });
 
-        String sql = "SELECT p.idPedido, p.fechaPedido, m.idMineral, m.tipo, ptm.cantidad, m.precio, " +
+        String sql = "SELECT p.idPedido, p.fechaPedido, m.idMineral, m.tipo, ptm.cantidad, m.precio, m.pureza, " +
                      "(ptm.cantidad * m.precio) AS subtotal " +
                      "FROM Pedido p " +
                      "JOIN pedido_tiene_mineral ptm ON p.idPedido = ptm.idPedido " +
@@ -154,6 +154,7 @@ public class ControllerPedido {
                     rs.getString("tipo"),
                     rs.getInt("cantidad"),
                     rs.getDouble("precio"),
+                    rs.getDouble("pureza") + "%",
                     rs.getDouble("subtotal")
                 };
                 modelo.addRow(fila);
@@ -169,6 +170,50 @@ public class ControllerPedido {
         return modelo;
     }
 
+	    public String[] obtenerFechasPedido(int idPedido) {
+	        String[] fechas = new String[2]; // [0] = fechaPedido, [1] = fechaEntrega
+	        try {
+	            String sql = "SELECT fechaPedido, fechaEntrega FROM pedido WHERE idPedido = ?";
+	            PreparedStatement ps = con.prepareStatement(sql);
+	            ps.setInt(1, idPedido);
+	            ResultSet rs = ps.executeQuery();
+	            if (rs.next()) {
+	                fechas[0] = String.valueOf(rs.getDate("fechaPedido"));
+	                fechas[1] = String.valueOf(rs.getDate("fechaEntrega"));
+	            }
+	            rs.close();
+	            ps.close();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	        return fechas;
+	    }
 
+	    public int obtenerUltimoPedido(int idUsuario) {
+	        int idPedido = -1;
+	        try {
+	            String sql = "SELECT p.idPedido FROM pedido p " +
+	                         "JOIN usuario_tiene_pedido utp ON p.idPedido = utp.idPedido " +
+	                         "WHERE utp.idUsuario = ? " +
+	                         "ORDER BY p.fechaPedido DESC LIMIT 1";
+
+	            PreparedStatement ps = con.prepareStatement(sql);
+	            ps.setInt(1, idUsuario);
+	            ResultSet rs = ps.executeQuery();
+
+	            if (rs.next()) {
+	                idPedido = rs.getInt("idPedido");
+	            }
+
+	            rs.close();
+	            ps.close();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+
+	        return idPedido;
+	    }
+
+    
 }
 

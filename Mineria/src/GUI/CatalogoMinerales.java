@@ -18,7 +18,7 @@ public class CatalogoMinerales extends JFrame {
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
     private Mineral mineralSeleccionado = null;
-    private LinkedList<Mineral> mineralesSeleccionados = new LinkedList<>();
+    private JTable tabla;  
 
 
 
@@ -26,7 +26,7 @@ public class CatalogoMinerales extends JFrame {
     	setIconImage(Toolkit.getDefaultToolkit().getImage(CatalogoMinerales.class.getResource("/IMG/diamante-super-chico.png")));
         setTitle("Catálogo de Minerales");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setBounds(100, 100, 753, 400);
+        setBounds(100, 100, 753, 430);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
         setContentPane(contentPane);
@@ -55,7 +55,7 @@ public class CatalogoMinerales extends JFrame {
         		modelo.addRow(fila);
         }
 
-        JTable tabla = new JTable(modelo);
+        tabla = new JTable(modelo);
         tabla.setRowSelectionAllowed(true);
         tabla.getTableHeader().setReorderingAllowed(false); 
         contentPane.setLayout(null);
@@ -65,7 +65,7 @@ public class CatalogoMinerales extends JFrame {
         tabla.getSelectionModel().addListSelectionListener(e -> {
         	int fila = tabla.getSelectedRow();
         	if (fila != -1) {
-        	    int idSeleccionado = (int) tabla.getValueAt(fila, 0); // Columna 0 = ID
+        	    int idSeleccionado = (int) tabla.getValueAt(fila, 0); 
         	    for (Mineral m : minerales) {
         	        if (m.getIdMineria() == idSeleccionado) {
         	            mineralSeleccionado = m;
@@ -82,8 +82,15 @@ public class CatalogoMinerales extends JFrame {
         contentPane.add(scrollPane);
         
         JButton btnNewButton = new JButton("SALIR");
-        btnNewButton.setBounds(575, 323, 154, 30);
+        btnNewButton.setBounds(573, 337, 154, 30);
         contentPane.add(btnNewButton);
+        
+        btnNewButton.addActionListener(e -> {
+            HomeCliente home = new HomeCliente(usuario);
+            home.setVisible(true);
+            dispose();  
+        });
+
         
         JButton btnAgregarAlCarrito = new JButton("AGREGAR AL CARRITO");
         btnAgregarAlCarrito.addActionListener(new ActionListener() {
@@ -128,7 +135,7 @@ public class CatalogoMinerales extends JFrame {
         contentPane.add(lblNewLabel);
         
         JButton btnNewButton_1 = new JButton("FINALIZAR PEDIDO");
-        btnNewButton_1.setBounds(364, 268, 178, 30);
+        btnNewButton_1.setBounds(549, 268, 178, 30);
         contentPane.add(btnNewButton_1);
         
         btnNewButton_1.addActionListener(e -> {
@@ -138,30 +145,80 @@ public class CatalogoMinerales extends JFrame {
 
             if (finalizado) {
                 JOptionPane.showMessageDialog(null, "Pedido finalizado con éxito.");
-                dispose();
+                HomeCliente home = new HomeCliente(usuario);
+                home.setVisible(true);                        
+                dispose();                                   
             } else {
                 JOptionPane.showMessageDialog(null, "No se pudo finalizar el pedido.");
             }
         });
 
         
-        JButton btnNewButton_3 = new JButton("FILTRO");
-        btnNewButton_3.setBounds(626, 269, 89, 30);
-        contentPane.add(btnNewButton_3);
+        
+
+        
+        JTextField inpFiltro = new JTextField();
+        inpFiltro.setBounds(10, 338, 150, 30);
+        contentPane.add(inpFiltro);
+
+        JButton btnFiltrar = new JButton("FILTRAR NOMBRE");
+        btnFiltrar.setFont(new Font("Tahoma", Font.PLAIN, 10));
+        btnFiltrar.setBounds(170, 338, 130, 30);
+        contentPane.add(btnFiltrar);
+
+        btnFiltrar.addActionListener(e -> {
+            String textoFiltro = inpFiltro.getText();
+            cargarTablaFiltrada(textoFiltro);
+        });
+
+        
+        JButton btnReiniciar = new JButton("REINICIAR FILTRO");
+        btnReiniciar.setBounds(310, 338, 130, 30);
+        contentPane.add(btnReiniciar);
+
+        btnReiniciar.addActionListener(e -> {
+            inpFiltro.setText("");
+            recargarTabla((DefaultTableModel) tabla.getModel());
+        });
+
         
         JButton btnResumenPedido = new JButton("RESUMEN PEDIDO");
         btnResumenPedido.setBounds(221, 268, 133, 31);
         contentPane.add(btnResumenPedido);
         
         btnResumenPedido.addActionListener(e -> {
-            resumenPedido resumen = new resumenPedido(usuario);
+            ResumenPedido resumen = new ResumenPedido(usuario);
             resumen.setVisible(true);
         });
 
         
     }
     
-    
+    private void cargarTablaFiltrada(String filtro) {
+        DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
+        modelo.setRowCount(0);
+
+        ControllerMineral controlador = new ControllerMineral();
+        LinkedList<Mineral> minerales = controlador.mostrarMinerales();
+
+        filtro = filtro.toLowerCase().trim();
+
+        for (Mineral m : minerales) {
+            if (m.getTipo().toLowerCase().contains(filtro)) {
+                Object[] fila = {
+                    m.getIdMineria(),
+                    m.getTipo(),
+                    m.getUnidades(),
+                    m.getPeso(),
+                    m.getPrecio(),
+                    m.getPureza() + "%",
+                    m.getDescuento() + "%"
+                };
+                modelo.addRow(fila);
+            }
+        }
+    }
+
          
     private void recargarTabla(DefaultTableModel modelo) {
         modelo.setRowCount(0); 
@@ -171,7 +228,7 @@ public class CatalogoMinerales extends JFrame {
 
         for (Mineral m : minerales) {
         	Object[] fila = {
-        		    m.getIdMineria(), // MOSTRÁS el ID
+        		    m.getIdMineria(), 
         		    m.getTipo(),
         		    m.getUnidades(),
         		    m.getPeso(),

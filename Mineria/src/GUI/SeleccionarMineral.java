@@ -12,7 +12,7 @@ public class SeleccionarMineral extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
-    private JTextField txtNombre, txtCantidad, txtPeso, txtPrecio, txtId;
+    private JTextField txtNombre, txtCantidad, txtPeso, txtPrecio, txID;
     private int idMineral;
     private Runnable onFinalizarCallback;
     private Usuario usuario;
@@ -40,10 +40,10 @@ public class SeleccionarMineral extends JFrame {
         lblId.setBounds(30, 93, 69, 31);
         contentPane.add(lblId);
 
-        txtId = new JTextField();
-        txtId.setEditable(false);
-        txtId.setBounds(30, 122, 152, 31);
-        contentPane.add(txtId);
+        txID = new JTextField();
+        txID.setEditable(false);
+        txID.setBounds(30, 122, 152, 31);
+        contentPane.add(txID);
 
         JLabel lblNombre = new JLabel("Nombre");
         lblNombre.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -103,11 +103,9 @@ public class SeleccionarMineral extends JFrame {
                 if (exito) {
                 	ControllerPedido controllerPedido = new ControllerPedido();
 
-                	// Buscar el pedido activo del usuario
                 	int idPedido = controllerPedido.obtenerPedidoActivo(usuario.getId());
 
                 	if (idPedido == -1) {
-                	    // Si no hay, crear uno nuevo
                 	    idPedido = controllerPedido.crearPedido(usuario.getId());
                 	}
 
@@ -135,7 +133,7 @@ public class SeleccionarMineral extends JFrame {
 
     public void setDatosMineral(int idMineral, String nombre, int cantidad, double peso, double precio) {
         this.idMineral = idMineral;
-        txtId.setText(String.valueOf(idMineral));
+        txID.setText(String.valueOf(idMineral));
         txtNombre.setText(nombre);
         txtCantidad.setText(String.valueOf(cantidad));
         txtPeso.setText(String.valueOf(peso));
