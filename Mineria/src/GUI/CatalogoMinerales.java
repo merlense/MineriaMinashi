@@ -27,7 +27,7 @@ public class CatalogoMinerales extends JFrame {
         contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
         setContentPane(contentPane);
 
-        String[] columnas = {"Nombre", "Cantidad", "Peso", "Precio", "Pureza", "Descuento"};
+        String[] columnas = {"ID", "Nombre", "Cantidad", "Peso", "Precio", "Pureza", "Descuento"};
 
         DefaultTableModel modelo = new DefaultTableModel(columnas, 0) {
             @Override
@@ -39,15 +39,16 @@ public class CatalogoMinerales extends JFrame {
         LinkedList<Mineral> minerales = controlador.mostrarMinerales();
 
         for (Mineral m : minerales) {
-            Object[] fila = {
-                m.getTipo(),
-                m.getUnidades(),
-                m.getPeso(),
-                m.getPrecio(),
-                m.getPureza() + "%",
-                m.getDescuento() + "%"
-            };
-            modelo.addRow(fila);
+        	Object[] fila = {
+        		    m.getIdMineria(), // MOSTRÁS el ID
+        		    m.getTipo(),
+        		    m.getUnidades(),
+        		    m.getPeso(),
+        		    m.getPrecio(),
+        		    m.getPureza() + "%",
+        		    m.getDescuento() + "%"
+        		};
+        		modelo.addRow(fila);
         }
 
         JTable tabla = new JTable(modelo);
@@ -56,13 +57,19 @@ public class CatalogoMinerales extends JFrame {
         contentPane.setLayout(null);
         
         tabla.getSelectionModel().addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting()) {
-                int fila = tabla.getSelectedRow();
-                if (fila != -1) {
-                    mineralSeleccionado = minerales.get(fila); 
-                }
-            }
-        });          
+        	int fila = tabla.getSelectedRow();
+        	if (fila != -1) {
+        	    int idSeleccionado = (int) tabla.getValueAt(fila, 0); // Columna 0 = ID
+        	    for (Mineral m : minerales) {
+        	        if (m.getIdMineria() == idSeleccionado) {
+        	            mineralSeleccionado = m;
+        	            break;
+        	        }
+        	    }
+        	}
+        });       
+        
+        
 
         JScrollPane scrollPane = new JScrollPane(tabla);
         scrollPane.setBounds(10, 55, 717, 203);
@@ -80,15 +87,31 @@ public class CatalogoMinerales extends JFrame {
         
         btnAgregarAlCarrito.addActionListener(e -> {
             if (mineralSeleccionado != null) {
-                JOptionPane.showMessageDialog(null, "Agregado al carrito: " + mineralSeleccionado.getTipo());               
+                SeleccionarMineral ventana = new SeleccionarMineral();
+
+                // Cargar datos en la ventana SeleccionarMineral
+                ventana.setDatosMineral(
+                	mineralSeleccionado.getIdMineria(),
+                    mineralSeleccionado.getTipo(),
+                    mineralSeleccionado.getUnidades(),
+                    mineralSeleccionado.getPeso(),
+                    mineralSeleccionado.getPrecio()
+                );
+
+                // PASO CLAVE: al finalizar, reabrir CatalogoMinerales
+                ventana.setOnFinalizar(() -> {
+                    CatalogoMinerales nuevaVentana = new CatalogoMinerales(usuario);
+                    nuevaVentana.setVisible(true);
+                });
+
+                ventana.setVisible(true);
+                dispose(); // Cierra esta ventana actual
             } else {
                 JOptionPane.showMessageDialog(null, "Seleccione un mineral primero");
             }
         });
 
-        
-   
-        
+
         
         btnAgregarAlCarrito.setBounds(10, 269, 201, 30);
         contentPane.add(btnAgregarAlCarrito);
@@ -107,25 +130,25 @@ public class CatalogoMinerales extends JFrame {
         btnNewButton_3.setBounds(626, 269, 89, 30);
         contentPane.add(btnNewButton_3);
         
-        
-        
-//        if (usuario.getTipo().equals("Cliente")) {
-//        	btnAgregarAlCarrito.setVisible(true);
-//
-//		} else {
-//   		btnAgregarAlCarrito.setVisible(false);
-//
-//		}
-////        JCheckBox chckbxNewCheckBox = new JCheckBox("Ocultar/Mostrar");
-////        chckbxNewCheckBox.setBounds(23, 331, 138, 23);
-////        contentPane.add(chckbxNewCheckBox);
-////        chckbxNewCheckBox.addActionListener(e->{
-////        	if (chckbxNewCheckBox.isSelected()) {
-////        		btnAgregarAlCarrito.setVisible(true);
-////			} else {
-////        		btnAgregarAlCarrito.setVisible(false);
-////
-////			}
-////        });
+    }
+         
+    private void recargarTabla(DefaultTableModel modelo) {
+        modelo.setRowCount(0); // Limpiar tabla
+
+        ControllerMineral controlador = new ControllerMineral();
+        LinkedList<Mineral> minerales = controlador.mostrarMinerales();
+
+        for (Mineral m : minerales) {
+        	Object[] fila = {
+        		    m.getIdMineria(), // MOSTRÁS el ID
+        		    m.getTipo(),
+        		    m.getUnidades(),
+        		    m.getPeso(),
+        		    m.getPrecio(),
+        		    m.getPureza() + "%",
+        		    m.getDescuento() + "%"
+        		};
+        		modelo.addRow(fila);
+        }
     }
 }
