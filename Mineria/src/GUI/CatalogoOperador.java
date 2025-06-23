@@ -1,29 +1,40 @@
 package GUI;
 
-import javax.swing.*;
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.LinkedList;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.util.LinkedList;
+
 import BLL.Mineral;
 import BLL.Usuario;
 import DLL.ControllerMineral;
 import DLL.ControllerPedido;
 
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+public class CatalogoOperador extends JFrame {
 
-public class CatalogoMinerales extends JFrame {
-
-    private static final long serialVersionUID = 1L;
-    private JPanel contentPane;
-    private Mineral mineralSeleccionado = null;
-    private JTable tabla;  
+	 private static final long serialVersionUID = 1L;
+	    private JPanel contentPane;
+	    private Mineral mineralSeleccionado = null;
+	    private JTable tabla;  
 
 
-
-    public CatalogoMinerales(Usuario  usuario) {
-    	setIconImage(Toolkit.getDefaultToolkit().getImage(CatalogoMinerales.class.getResource("/IMG/diamante-super-chico.png")));
+	
+	public CatalogoOperador(Usuario  usuario) {
+    	setIconImage(Toolkit.getDefaultToolkit().getImage(CatalogoCliente.class.getResource("/IMG/diamante-super-chico.png")));
         setTitle("Catálogo de Minerales");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setBounds(100, 100, 753, 430);
@@ -111,7 +122,7 @@ public class CatalogoMinerales extends JFrame {
                 );
 
                 ventana.setOnFinalizar(() -> {
-                    CatalogoMinerales nuevaVentana = new CatalogoMinerales(usuario);
+                	CatalogoCliente nuevaVentana = new CatalogoCliente(usuario);
                     nuevaVentana.setVisible(true);
                 });
 
@@ -240,3 +251,4 @@ public class CatalogoMinerales extends JFrame {
         }
     }
 }
+

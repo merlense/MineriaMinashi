@@ -13,8 +13,6 @@ public class ControllerMineral {
         this.con = Conexion.getInstance().getConnection();
     }
 
-    
-    
     public LinkedList<Mineral> mostrarMinerales() {
         LinkedList<Mineral> minerales = new LinkedList<>();
         try {

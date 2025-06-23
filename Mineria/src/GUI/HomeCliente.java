@@ -33,7 +33,7 @@ public class HomeCliente extends JFrame {
 
         CatalogoCLBT.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                CatalogoMinerales catalogo = new CatalogoMinerales(usuario);
+            	CatalogoCliente catalogo = new CatalogoCliente(usuario);
                 catalogo.setVisible(true);
                 dispose(); 
             }

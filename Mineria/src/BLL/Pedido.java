@@ -8,7 +8,7 @@ public class Pedido {
 	private String tipo;
 	private LocalDateTime fecha;
 	private String detalle;
-    private LinkedList<String> estado = new LinkedList<>();
+    
     
     
 	public Pedido(int id_pedido, String tipo, LocalDateTime fecha, String detalle) {
@@ -43,13 +43,6 @@ public class Pedido {
 	public void setDetalle(String detalle) {
 		this.detalle = detalle;
 	}
-	public LinkedList<String> getEstado() {
-		return estado;
-	}
-	public void setEstado(LinkedList<String> estado) {
-		this.estado = estado;
-	}
-    
     
 	
 }

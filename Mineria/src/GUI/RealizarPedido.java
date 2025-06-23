@@ -16,7 +16,7 @@ public class RealizarPedido extends JFrame {
     private JPanel contentPane;
 
     public RealizarPedido() {
-    	setIconImage(Toolkit.getDefaultToolkit().getImage(CatalogoMinerales.class.getResource("/IMG/diamante-super-chico.png")));
+    	setIconImage(Toolkit.getDefaultToolkit().getImage(CatalogoCliente.class.getResource("/IMG/diamante-super-chico.png")));
         setTitle("Catálogo de Minerales");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setBounds(100, 100, 600, 400);
