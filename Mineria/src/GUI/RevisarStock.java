@@ -20,6 +20,7 @@ import java.awt.Font;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Color;
 
 public class RevisarStock extends JFrame {
 
@@ -29,7 +30,6 @@ public class RevisarStock extends JFrame {
     private JTable tabla;
     private JButton alertaStock;
     private JButton VolverBTN;
-    private JLabel RevisarStock;
     private JButton btnFiltrar;
     private JTextField textField;
     private JLabel lblNewLabel;
@@ -39,7 +39,7 @@ public class RevisarStock extends JFrame {
         setIconImage(Toolkit.getDefaultToolkit().getImage(RevisarStock.class.getResource("/IMG/diamante-super-chico.png")));
         setTitle("Revisar stock");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setBounds(100, 100, 747, 430);
+        setBounds(100, 100, 747, 419);
         setLocationRelativeTo(null);
 
         contentPane = new JPanel();
@@ -79,24 +79,33 @@ public class RevisarStock extends JFrame {
         scrollPane.setBounds(10, 40, 715, 222);
         contentPane.add(scrollPane);
 
+     // Primero crear y añadir los botones
         alertaStock = new JButton("Pedir stock");
         alertaStock.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        alertaStock.setBounds(10, 272, 121, 46);
+        alertaStock.setBounds(535, 272, 190, 35);
         contentPane.add(alertaStock);
 
         VolverBTN = new JButton("Volver");
         VolverBTN.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        VolverBTN.setBounds(604, 337, 121, 46);
+        VolverBTN.setBounds(602, 337, 121, 35);
         contentPane.add(VolverBTN);
 
+        alertaStock.addActionListener(e -> {
+            EnviarAviso ventanaAviso = new EnviarAviso(null);
+            ventanaAviso.setVisible(true);
+            dispose();
+        });
+
+
         VolverBTN.addActionListener(e -> {
-            HomeEncargado home = new HomeEncargado(null); 
-            home.setVisible(true); 
-            dispose(); 
+            HomeEncargado home = new HomeEncargado(null);
+            home.setVisible(true);
+            dispose();
         });
 
 
         btnFiltrar = new JButton("Filtrar");
+        btnFiltrar.setFont(new Font("Tahoma", Font.PLAIN, 14));
         btnFiltrar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String texto = textField.getText().trim();
@@ -114,7 +123,7 @@ public class RevisarStock extends JFrame {
                 }
 
                 DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
-                modelo.setRowCount(0); // limpia
+                modelo.setRowCount(0); 
 
                 for (Mineral m : minerales) {
                     if (m.getUnidades() <= cantidadFiltro) {
@@ -132,17 +141,29 @@ public class RevisarStock extends JFrame {
                 }
             }
         });
-        btnFiltrar.setBounds(116, 352, 85, 21);
+        
+        btnFiltrar.setBounds(186, 287, 113, 26);
         contentPane.add(btnFiltrar);
 
         textField = new JTextField();
-        textField.setBounds(10, 353, 96, 19);
+        textField.setBounds(10, 287, 165, 26);
         contentPane.add(textField);
         textField.setColumns(10);
 
         lblNewLabel = new JLabel("Filtro");
-        lblNewLabel.setBounds(10, 337, 45, 13);
+        lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 13));
+        lblNewLabel.setBounds(10, 272, 144, 13);
         contentPane.add(lblNewLabel);
+        
+        JLabel lblNewLabel_1 = new JLabel("Filtra por cantidad de stock");
+        lblNewLabel_1.setForeground(new Color(0, 64, 128));
+        lblNewLabel_1.setBounds(10, 317, 144, 13);
+        contentPane.add(lblNewLabel_1);
+        
+        JLabel lblRevisarStock = new JLabel("REVISAR STOCK");
+        lblRevisarStock.setFont(new Font("Segoe UI Semibold", Font.BOLD, 22));
+        lblRevisarStock.setBounds(10, 10, 224, 26);
+        contentPane.add(lblRevisarStock);
 
         tabla.getSelectionModel().addListSelectionListener(e -> {
             int fila = tabla.getSelectedRow();
