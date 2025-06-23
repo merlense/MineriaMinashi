@@ -18,7 +18,6 @@ public class ControllerPedido {
 
     public int crearPedido(int idUsuario) {
         try {
-            // Verificar si ya existe un pedido en curso
             String consulta = "SELECT p.idPedido FROM pedido p " +
                               "JOIN usuario_tiene_pedido utp ON p.idPedido = utp.idPedido " +
                               "WHERE utp.idUsuario = ? AND p.fechaEntrega IS NULL";
@@ -30,12 +29,11 @@ public class ControllerPedido {
                 int pedidoExistente = rs.getInt("idPedido");
                 rs.close();
                 checkStmt.close();
-                return pedidoExistente;  // Ya hay un pedido activo
+                return pedidoExistente;  
             }
             rs.close();
             checkStmt.close();
 
-            // Crear nuevo pedido
             String insertPedidoSQL = "INSERT INTO pedido (fechaPedido, fechaEntrega) VALUES (?, ?)";
             PreparedStatement ps = con.prepareStatement(insertPedidoSQL, PreparedStatement.RETURN_GENERATED_KEYS);
             Date hoy = new Date(System.currentTimeMillis());
@@ -51,7 +49,6 @@ public class ControllerPedido {
             rs2.close();
             ps.close();
 
-            // Relacionar pedido con usuario
             String insertRelacion = "INSERT INTO usuario_tiene_pedido (idUsuario, idPedido) VALUES (?, ?)";
             PreparedStatement psRel = con.prepareStatement(insertRelacion);
             psRel.setInt(1, idUsuario);
@@ -86,7 +83,6 @@ public class ControllerPedido {
     }
 
 
-    // Finalizar pedido (por ejemplo, actualizar fechaEntrega)
     public boolean finalizarPedido(int idPedido) {
         try {
             String sql = "UPDATE pedido SET fechaEntrega = ? WHERE idPedido = ?";
@@ -171,7 +167,7 @@ public class ControllerPedido {
     }
 
 	    public String[] obtenerFechasPedido(int idPedido) {
-	        String[] fechas = new String[2]; // [0] = fechaPedido, [1] = fechaEntrega
+	        String[] fechas = new String[2]; 
 	        try {
 	            String sql = "SELECT fechaPedido, fechaEntrega FROM pedido WHERE idPedido = ?";
 	            PreparedStatement ps = con.prepareStatement(sql);

@@ -18,7 +18,7 @@ public class ResumenPedido extends JFrame {
     public ResumenPedido(Usuario usuario) {
         setTitle("Resumen de Pedido");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setBounds(100, 100, 850, 500); // un poco más ancho por la columna extra
+        setBounds(100, 100, 850, 500); 
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
         setContentPane(contentPane);

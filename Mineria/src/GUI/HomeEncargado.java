@@ -17,6 +17,9 @@ public class HomeEncargado extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 
+	
+	//HOLA
+	
 	public HomeEncargado() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 647, 300);
@@ -29,7 +32,6 @@ public class HomeEncargado extends JFrame {
 		JButton SalirCLBT = new JButton("Salir");
 		SalirCLBT.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// ACCION SALIR
 			}
 		});
 		SalirCLBT.setBounds(260, 186, 95, 52);
@@ -45,7 +47,6 @@ public class HomeEncargado extends JFrame {
 		JButton VerPedidoENBT = new JButton("Ver pedido");
 		VerPedidoENBT.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// ACCION VER PEDIDO
 			}
 		});
 		VerPedidoENBT.setBounds(50, 104, 123, 52);
@@ -55,7 +56,6 @@ public class HomeEncargado extends JFrame {
 		JButton RevisarStockENBT = new JButton("Revisar stock");
 		RevisarStockENBT.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// ACCION REVISAR STOCK
 			}
 		});
 		RevisarStockENBT.setBounds(232, 104, 145, 52);
@@ -65,7 +65,6 @@ public class HomeEncargado extends JFrame {
 		JButton EnviarPedidoENBT = new JButton("Enviar pedido");
 		EnviarPedidoENBT.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// ACCION ENVIAR PEDIDO
 			}
 		});
 		EnviarPedidoENBT.setBounds(426, 104, 145, 52);
