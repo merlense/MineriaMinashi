@@ -274,4 +274,77 @@ public class ControllerPedido {
         }
     }
     
+    public DefaultTableModel obtenerPedidosConFiltros(String estadoFiltro, String fechaEntregaFiltro) {
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.setColumnIdentifiers(new Object[]{
+            "ID Pedido", "Cliente", "Mineral", "Pureza", "Cantidad", "Subtotal", "Estado", "Fecha Entrega"
+        });
+
+        String sql = "SELECT p.idPedido, u.nombre AS cliente, m.tipo AS mineral, m.pureza, ptm.cantidad, " +
+                     "(ptm.cantidad * m.precio) AS subtotal, p.estado, p.fechaEntrega " +
+                     "FROM pedido p " +
+                     "JOIN usuario_tiene_pedido utp ON p.idPedido = utp.idPedido " +
+                     "JOIN usuario u ON utp.idUsuario = u.id " +
+                     "JOIN pedido_tiene_mineral ptm ON p.idPedido = ptm.idPedido " +
+                     "JOIN mineral m ON ptm.idMineral = m.idMineral " +
+                     "WHERE 1=1 ";
+
+        // Agregar filtros dinámicos
+        if (estadoFiltro != null && !estadoFiltro.equalsIgnoreCase("Todos")) {
+            sql += " AND p.estado = ?";
+        }
+        if (fechaEntregaFiltro != null && !fechaEntregaFiltro.isEmpty()) {
+            sql += " AND p.fechaEntrega = ?";
+        }
+
+        sql += " ORDER BY p.idPedido";
+
+        try {
+            PreparedStatement stmt = con.prepareStatement(sql);
+            int paramIndex = 1;
+            if (estadoFiltro != null && !estadoFiltro.equalsIgnoreCase("Todos")) {
+                stmt.setString(paramIndex++, estadoFiltro);
+            }
+            if (fechaEntregaFiltro != null && !fechaEntregaFiltro.isEmpty()) {
+                stmt.setDate(paramIndex++, Date.valueOf(fechaEntregaFiltro));
+            }
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                modelo.addRow(new Object[]{
+                    rs.getInt("idPedido"),
+                    rs.getString("cliente"),
+                    rs.getString("mineral"),
+                    rs.getDouble("pureza") + "%",
+                    rs.getInt("cantidad"),
+                    rs.getDouble("subtotal"),
+                    rs.getString("estado"),
+                    rs.getDate("fechaEntrega")
+                });
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return modelo;
+    }
+
+    public boolean actualizarFechaEntrega(int idPedido, Date nuevaFechaEntrega) {
+        try {
+            String sql = "UPDATE pedido SET fechaEntrega = ? WHERE idPedido = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setDate(1, nuevaFechaEntrega);
+            ps.setInt(2, idPedido);
+            int rows = ps.executeUpdate();
+            ps.close();
+            return rows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }

@@ -1,10 +1,8 @@
 package GUI;
 
-import java.awt.EventQueue;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-import BLL.Pedido;
 import BLL.Usuario;
 
 import java.awt.Font;
@@ -17,11 +15,10 @@ public class HomeEncargado extends JFrame {
     private JPanel contentPane;
     private Usuario usuario;
 
-
     public HomeEncargado(Usuario usuario) {
         this.usuario = usuario;
 
-    	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setBounds(100, 100, 647, 300);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -56,13 +53,15 @@ public class HomeEncargado extends JFrame {
             dispose();
         });
 
-        JButton EnviarPedidoENBT = new JButton("Enviar pedido");
-        EnviarPedidoENBT.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        EnviarPedidoENBT.setBounds(426, 104, 145, 52);
-        contentPane.add(EnviarPedidoENBT);
-        EnviarPedidoENBT.addActionListener(new ActionListener() {
+        JButton GestionarPedidoENBT = new JButton("Gestionar pedido");
+        GestionarPedidoENBT.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        GestionarPedidoENBT.setBounds(426, 104, 169, 52);
+        contentPane.add(GestionarPedidoENBT);
+        GestionarPedidoENBT.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-               
+                GestionarPedido gestionar = new GestionarPedido();
+                gestionar.setVisible(true);
+                dispose(); 
             }
         });
 
@@ -72,7 +71,7 @@ public class HomeEncargado extends JFrame {
         contentPane.add(SalirCLBT);
         SalirCLBT.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                dispose(); 
+                dispose();
             }
         });
     }

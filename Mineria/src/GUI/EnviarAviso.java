@@ -21,7 +21,7 @@ public class EnviarAviso extends JFrame {
         this.idMineral = idMineral;
         setTitle("Pedido Stock");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setBounds(100, 100, 370, 470);
+        setBounds(100, 100, 370, 405);
         setLocationRelativeTo(null);
 
         contentPane = new JPanel();

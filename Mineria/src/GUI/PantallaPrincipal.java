@@ -99,7 +99,7 @@ public class PantallaPrincipal extends JFrame {
 		        if (usuario != null) {
 		            JOptionPane.showMessageDialog(null, "Bienvenido " + usuario.getTipo() + " " + usuario.getNombre());
 
-		            dispose(); // Cierra la ventana actual (PantallaPrincipal)
+		            dispose(); 
 
 		            switch (usuario.getTipo().toLowerCase()) {
 		                case "cliente":
@@ -129,7 +129,7 @@ public class PantallaPrincipal extends JFrame {
 		JButton RegistroBtn = new JButton("Registrate");
 		RegistroBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// Abrir ventana de registro
+		
 				MenuRegistro registro = new MenuRegistro();
 				registro.setVisible(true);
 				dispose();
