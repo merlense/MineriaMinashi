@@ -14,8 +14,12 @@ import BLL.Mineral;
 import BLL.Pedido;
 import DLL.ControllerMineral;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.Font;
+import javax.swing.JTextField;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class RevisarStock extends JFrame {
 
@@ -24,21 +28,25 @@ public class RevisarStock extends JFrame {
     private Mineral mineralSeleccionado = null;
     private JTable tabla;
     private JButton alertaStock;
-    private JButton alertaStock_1;
+    private JButton VolverBTN;
+    private JLabel RevisarStock;
+    private JButton btnFiltrar;
+    private JTextField textField;
+    private JLabel lblNewLabel;
+    private LinkedList<Mineral> minerales; 
 
     public RevisarStock(Pedido pedido) {
         setIconImage(Toolkit.getDefaultToolkit().getImage(RevisarStock.class.getResource("/IMG/diamante-super-chico.png")));
         setTitle("Revisar stock");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setBounds(100, 100, 747, 430);
-        setLocationRelativeTo(null); // Centra la ventana
+        setLocationRelativeTo(null);
 
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
-        contentPane.setLayout(null);  // importante para colocar el scrollPane
+        contentPane.setLayout(null);
         setContentPane(contentPane);
 
-        // Columnas de la tabla
         String[] columnas = { "ID", "Nombre", "Cantidad", "Peso", "Precio", "Pureza", "Descuento" };
         DefaultTableModel modelo = new DefaultTableModel(columnas, 0) {
             @Override
@@ -47,9 +55,8 @@ public class RevisarStock extends JFrame {
             }
         };
 
-        // Cargar minerales desde la base de datos
         ControllerMineral controlador = new ControllerMineral();
-        LinkedList<Mineral> minerales = controlador.mostrarMinerales();
+        minerales = controlador.mostrarMinerales();
 
         for (Mineral m : minerales) {
             Object[] fila = {
@@ -64,26 +71,77 @@ public class RevisarStock extends JFrame {
             modelo.addRow(fila);
         }
 
-        // Crear tabla y scrollPane
         tabla = new JTable(modelo);
         tabla.setRowSelectionAllowed(true);
         tabla.getTableHeader().setReorderingAllowed(false);
 
         JScrollPane scrollPane = new JScrollPane(tabla);
-        scrollPane.setBounds(10, 10, 715, 222); // ajustá tamaño si querés
+        scrollPane.setBounds(10, 40, 715, 222);
         contentPane.add(scrollPane);
-        
+
         alertaStock = new JButton("Pedir stock");
         alertaStock.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        alertaStock.setBounds(165, 285, 121, 46);
+        alertaStock.setBounds(10, 272, 121, 46);
         contentPane.add(alertaStock);
-        
-        alertaStock_1 = new JButton("Pedir stock");
-        alertaStock_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        alertaStock_1.setBounds(428, 285, 121, 46);
-        contentPane.add(alertaStock_1);
 
-        // Evento al seleccionar una fila
+        VolverBTN = new JButton("Volver");
+        VolverBTN.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        VolverBTN.setBounds(604, 337, 121, 46);
+        contentPane.add(VolverBTN);
+
+        VolverBTN.addActionListener(e -> {
+            HomeEncargado home = new HomeEncargado(pedido); 
+            dispose();
+        });
+
+        btnFiltrar = new JButton("Filtrar");
+        btnFiltrar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String texto = textField.getText().trim();
+                if (texto.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Por favor ingrese una cantidad para filtrar.");
+                    return;
+                }
+
+                int cantidadFiltro;
+                try {
+                    cantidadFiltro = Integer.parseInt(texto);
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Debe ingresar un número válido.");
+                    return;
+                }
+
+                DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
+                modelo.setRowCount(0); // limpia
+
+                for (Mineral m : minerales) {
+                    if (m.getUnidades() <= cantidadFiltro) {
+                        Object[] fila = {
+                            m.getIdMineria(),
+                            m.getTipo(),
+                            m.getUnidades(),
+                            m.getPeso(),
+                            m.getPrecio(),
+                            m.getPureza() + "%",
+                            m.getDescuento() + "%"
+                        };
+                        modelo.addRow(fila);
+                    }
+                }
+            }
+        });
+        btnFiltrar.setBounds(116, 352, 85, 21);
+        contentPane.add(btnFiltrar);
+
+        textField = new JTextField();
+        textField.setBounds(10, 353, 96, 19);
+        contentPane.add(textField);
+        textField.setColumns(10);
+
+        lblNewLabel = new JLabel("Filtro");
+        lblNewLabel.setBounds(10, 337, 45, 13);
+        contentPane.add(lblNewLabel);
+
         tabla.getSelectionModel().addListSelectionListener(e -> {
             int fila = tabla.getSelectedRow();
             if (fila != -1) {

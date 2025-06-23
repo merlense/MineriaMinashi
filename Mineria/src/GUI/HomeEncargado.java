@@ -15,7 +15,7 @@ public class HomeEncargado extends JFrame {
     private JPanel contentPane;
 
     public HomeEncargado(Pedido pedido) {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setBounds(100, 100, 647, 300);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
