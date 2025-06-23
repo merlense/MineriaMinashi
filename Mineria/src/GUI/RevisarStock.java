@@ -90,9 +90,11 @@ public class RevisarStock extends JFrame {
         contentPane.add(VolverBTN);
 
         VolverBTN.addActionListener(e -> {
-            HomeEncargado home = new HomeEncargado(pedido); 
-            dispose();
+            HomeEncargado home = new HomeEncargado(null); 
+            home.setVisible(true); 
+            dispose(); 
         });
+
 
         btnFiltrar = new JButton("Filtrar");
         btnFiltrar.addActionListener(new ActionListener() {
