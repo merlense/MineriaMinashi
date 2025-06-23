@@ -109,7 +109,7 @@ public class PantallaPrincipal extends JFrame {
 		                    new HomeOperador().setVisible(true);
 		                    break;
 		                case "encargado":
-		                    new HomeEncargado(null).setVisible(true);
+		                    new HomeEncargado(usuario).setVisible(true);
 		                    break;
 		                default:
 		                    JOptionPane.showMessageDialog(null, "Tipo de usuario no reconocido.");

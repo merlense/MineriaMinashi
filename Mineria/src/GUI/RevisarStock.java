@@ -12,7 +12,9 @@ import javax.swing.table.DefaultTableModel;
 
 import BLL.Mineral;
 import BLL.Pedido;
+import BLL.Usuario;
 import DLL.ControllerMineral;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
@@ -34,8 +36,11 @@ public class RevisarStock extends JFrame {
     private JTextField textField;
     private JLabel lblNewLabel;
     private LinkedList<Mineral> minerales; 
+    private Usuario usuario;
 
-    public RevisarStock(Pedido pedido) {
+    public RevisarStock(Pedido pedido, Usuario usuario) {
+        this.usuario = usuario;
+
         setIconImage(Toolkit.getDefaultToolkit().getImage(RevisarStock.class.getResource("/IMG/diamante-super-chico.png")));
         setTitle("Revisar stock");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -79,26 +84,34 @@ public class RevisarStock extends JFrame {
         scrollPane.setBounds(10, 40, 715, 222);
         contentPane.add(scrollPane);
 
-     // Primero crear y añadir los botones
         alertaStock = new JButton("Pedir stock");
         alertaStock.setFont(new Font("Tahoma", Font.PLAIN, 16));
         alertaStock.setBounds(535, 272, 190, 35);
         contentPane.add(alertaStock);
+
+        alertaStock.addActionListener(e -> {
+            if (mineralSeleccionado == null) {
+                JOptionPane.showMessageDialog(this, "Por favor seleccione un mineral de la tabla.");
+                return;
+            }
+
+            EnviarAviso aviso = new EnviarAviso(
+                usuario,
+                mineralSeleccionado.getIdMineria(),
+                mineralSeleccionado.getTipo(),
+                mineralSeleccionado.getPeso(),
+                mineralSeleccionado.getPrecio()
+            );
+            aviso.setVisible(true);
+        });
 
         VolverBTN = new JButton("Volver");
         VolverBTN.setFont(new Font("Tahoma", Font.PLAIN, 16));
         VolverBTN.setBounds(602, 337, 121, 35);
         contentPane.add(VolverBTN);
 
-        alertaStock.addActionListener(e -> {
-            EnviarAviso ventanaAviso = new EnviarAviso(null);
-            ventanaAviso.setVisible(true);
-            dispose();
-        });
-
-
         VolverBTN.addActionListener(e -> {
-            HomeEncargado home = new HomeEncargado(null);
+            HomeEncargado home = new HomeEncargado(usuario); // <--- PASAR EL USUARIO
             home.setVisible(true);
             dispose();
         });
@@ -123,7 +136,7 @@ public class RevisarStock extends JFrame {
                 }
 
                 DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
-                modelo.setRowCount(0); 
+                modelo.setRowCount(0);
 
                 for (Mineral m : minerales) {
                     if (m.getUnidades() <= cantidadFiltro) {
@@ -141,7 +154,7 @@ public class RevisarStock extends JFrame {
                 }
             }
         });
-        
+
         btnFiltrar.setBounds(186, 287, 113, 26);
         contentPane.add(btnFiltrar);
 
@@ -154,12 +167,12 @@ public class RevisarStock extends JFrame {
         lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 13));
         lblNewLabel.setBounds(10, 272, 144, 13);
         contentPane.add(lblNewLabel);
-        
+
         JLabel lblNewLabel_1 = new JLabel("Filtra por cantidad de stock");
         lblNewLabel_1.setForeground(new Color(0, 64, 128));
         lblNewLabel_1.setBounds(10, 317, 144, 13);
         contentPane.add(lblNewLabel_1);
-        
+
         JLabel lblRevisarStock = new JLabel("REVISAR STOCK");
         lblRevisarStock.setFont(new Font("Segoe UI Semibold", Font.BOLD, 22));
         lblRevisarStock.setBounds(10, 10, 224, 26);

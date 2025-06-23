@@ -5,6 +5,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import BLL.Pedido;
+import BLL.Usuario;
+
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -13,8 +15,12 @@ public class HomeEncargado extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
+    private Usuario usuario;
 
-    public HomeEncargado(Pedido pedido) {
+
+    public HomeEncargado(Usuario usuario) {
+        this.usuario = usuario;
+
     	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setBounds(100, 100, 647, 300);
         contentPane = new JPanel();
@@ -44,12 +50,10 @@ public class HomeEncargado extends JFrame {
         RevisarStockENBT.setFont(new Font("Tahoma", Font.PLAIN, 16));
         RevisarStockENBT.setBounds(232, 104, 145, 52);
         contentPane.add(RevisarStockENBT);
-        RevisarStockENBT.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-            	RevisarStock revisar = new RevisarStock(pedido);
-            	  revisar.setVisible(true);
-                  dispose();
-            }
+        RevisarStockENBT.addActionListener(e -> {
+            RevisarStock revisar = new RevisarStock(null, usuario);
+            revisar.setVisible(true);
+            dispose();
         });
 
         JButton EnviarPedidoENBT = new JButton("Enviar pedido");
