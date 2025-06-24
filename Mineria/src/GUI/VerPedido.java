@@ -68,7 +68,7 @@ public class VerPedido extends JFrame {
             }
         });
 
-        cargarPedidos(null); 
+        cargarPedidos(null);
     }
 
     private void cargarPedidos(String estado) {

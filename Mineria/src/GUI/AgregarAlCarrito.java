@@ -8,7 +8,7 @@ import BLL.Usuario;
 import DLL.ControllerMineral;
 import DLL.ControllerPedido;
 
-public class SeleccionarMineral extends JFrame {
+public class AgregarAlCarrito extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
@@ -17,7 +17,7 @@ public class SeleccionarMineral extends JFrame {
     private Runnable onFinalizarCallback;
     private Usuario usuario;
 
-    public SeleccionarMineral(Usuario usuario) {
+    public AgregarAlCarrito(Usuario usuario) {
         this.usuario = usuario;
         initialize();
     }
@@ -101,16 +101,15 @@ public class SeleccionarMineral extends JFrame {
                 boolean exito = controladorMineral.restarCantidad(idMineral, cantidadSeleccionada);
 
                 if (exito) {
-                	ControllerPedido controllerPedido = new ControllerPedido();
+                    ControllerPedido controllerPedido = new ControllerPedido();
 
-                	int idPedido = controllerPedido.obtenerPedidoActivo(usuario.getId());
+                    // Obtener pedido activo o crear si no existe
+                    int idPedido = controllerPedido.obtenerPedidoActivo(usuario.getId());
+                    if (idPedido == -1) {
+                        idPedido = controllerPedido.crearPedido(usuario.getId());
+                    }
 
-                	if (idPedido == -1) {
-                	    idPedido = controllerPedido.crearPedido(usuario.getId());
-                	}
-
-                	boolean agregado = controllerPedido.agregarMineralAPedido(idPedido, idMineral, cantidadSeleccionada);
-
+                    boolean agregado = controllerPedido.agregarMineralAPedido(idPedido, idMineral, cantidadSeleccionada);
 
                     if (agregado) {
                         JOptionPane.showMessageDialog(null, "Mineral agregado al pedido correctamente.");

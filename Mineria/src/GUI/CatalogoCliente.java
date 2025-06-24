@@ -99,7 +99,7 @@ public class CatalogoCliente extends JFrame {
         
         btnAgregarAlCarrito.addActionListener(e -> {
             if (mineralSeleccionado != null) {
-                SeleccionarMineral ventana = new SeleccionarMineral(usuario);
+            	AgregarAlCarrito ventana = new AgregarAlCarrito(usuario);
 
                 ventana.setDatosMineral(
                     mineralSeleccionado.getIdMineria(),

@@ -25,7 +25,7 @@ public class GestionarPedido extends JFrame {
     public GestionarPedido() {
         setTitle("Gestionar pedidos - Encargado");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setBounds(100, 100, 1000, 620);
+        setBounds(100, 100, 1000, 639);
         setLocationRelativeTo(null);
 
         contentPane = new JPanel();
@@ -47,10 +47,9 @@ public class GestionarPedido extends JFrame {
         tabla.setModel(new DefaultTableModel());
         tabla.setFillsViewportHeight(true);
         tabla.getTableHeader().setReorderingAllowed(false);
-        tabla.setDefaultEditor(Object.class, null); // Evita edición directa
+        tabla.setDefaultEditor(Object.class, null);
         scrollPane.setViewportView(tabla);
 
-        // Filtro ID Pedido
         JLabel lblFiltroId = new JLabel("ID Pedido:");
         lblFiltroId.setBounds(10, 50, 70, 25);
         contentPane.add(lblFiltroId);
@@ -59,7 +58,6 @@ public class GestionarPedido extends JFrame {
         filtroIdPedidoText.setBounds(80, 50, 100, 25);
         contentPane.add(filtroIdPedidoText);
 
-        // Filtro Estado
         JLabel lblFiltroEstado = new JLabel("Estado:");
         lblFiltroEstado.setBounds(200, 50, 60, 25);
         contentPane.add(lblFiltroEstado);
@@ -72,7 +70,6 @@ public class GestionarPedido extends JFrame {
         btnFiltrar.setBounds(410, 50, 100, 25);
         contentPane.add(btnFiltrar);
 
-        // Date chooser para fecha entrega
         dateChooser = new JDateChooser();
         dateChooser.setDateFormatString("dd/MM/yyyy");
         dateChooser.setBounds(10, 460, 150, 25);
@@ -100,28 +97,26 @@ public class GestionarPedido extends JFrame {
         contentPane.add(btnSalir);
         btnSalir.addActionListener(e -> dispose());
 
-        // Listeners
-
         btnFiltrar.addActionListener(e -> cargarPedidos());
 
         filtroEstadoCombo.addActionListener(e -> cargarPedidos());
 
         tabla.getSelectionModel().addListSelectionListener(e -> {
-            int fila = tabla.getSelectedRow();
-            if (fila != -1) {
-                idPedidoSeleccionado = (int) tabla.getValueAt(fila, 0);
-
-                Object fechaObj = tabla.getValueAt(fila, 7);
-                if (fechaObj instanceof Date) {
-                    dateChooser.setDate((Date) fechaObj);
-                } else if (fechaObj instanceof java.util.Date) {
-                    dateChooser.setDate((java.util.Date) fechaObj);
-                } else {
-                    dateChooser.setDate(null);
+            if (!e.getValueIsAdjusting()) {
+                int fila = tabla.getSelectedRow();
+                if (fila != -1) {
+                    idPedidoSeleccionado = Integer.parseInt(tabla.getValueAt(fila, 0).toString());
+                    Object fechaObj = tabla.getValueAt(fila, 7);
+                    if (fechaObj instanceof java.sql.Date) {
+                        dateChooser.setDate((java.sql.Date) fechaObj);
+                    } else if (fechaObj instanceof java.util.Date) {
+                        dateChooser.setDate((java.util.Date) fechaObj);
+                    } else {
+                        dateChooser.setDate(null);
+                    }
+                    String estadoActual = tabla.getValueAt(fila, 6).toString();
+                    estadoCombo.setSelectedItem(estadoActual);
                 }
-
-                String estadoActual = tabla.getValueAt(fila, 6).toString();
-                estadoCombo.setSelectedItem(estadoActual);
             }
         });
 
@@ -165,7 +160,6 @@ public class GestionarPedido extends JFrame {
 
     private void cargarPedidos() {
         ControllerPedido cp = new ControllerPedido();
-
         String estado = Objects.requireNonNull(filtroEstadoCombo.getSelectedItem()).toString();
         String idPedidoText = filtroIdPedidoText.getText().trim();
 
@@ -181,7 +175,7 @@ public class GestionarPedido extends JFrame {
 
         DefaultTableModel modelo = cp.obtenerPedidosConFiltros(idPedidoFiltro, estado.equals("Todos") ? null : estado);
         tabla.setModel(modelo);
-        tabla.setDefaultEditor(Object.class, null); // Evita edición directa
+        tabla.setDefaultEditor(Object.class, null);
         idPedidoSeleccionado = -1;
         dateChooser.setDate(null);
         estadoCombo.setSelectedIndex(0);

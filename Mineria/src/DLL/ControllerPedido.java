@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.table.DefaultTableModel;
 
@@ -29,16 +30,17 @@ public class ControllerPedido {
                 int pedidoExistente = rs.getInt("idPedido");
                 rs.close();
                 checkStmt.close();
-                return pedidoExistente;  
+                return pedidoExistente;
             }
             rs.close();
             checkStmt.close();
 
-            String insertPedidoSQL = "INSERT INTO pedido (fechaPedido, fechaEntrega) VALUES (?, ?)";
+            String insertPedidoSQL = "INSERT INTO pedido (fechaPedido, fechaEntrega, estado) VALUES (?, ?, ?)";
             PreparedStatement ps = con.prepareStatement(insertPedidoSQL, PreparedStatement.RETURN_GENERATED_KEYS);
             Date hoy = new Date(System.currentTimeMillis());
             ps.setDate(1, hoy);
             ps.setDate(2, null);
+            ps.setString(3, "pendiente");
             ps.executeUpdate();
 
             ResultSet rs2 = ps.getGeneratedKeys();
@@ -83,7 +85,7 @@ public class ControllerPedido {
 
     public boolean finalizarPedido(int idPedido) {
         try {
-            String sql = "UPDATE pedido SET fechaEntrega = ? WHERE idPedido = ?";
+            String sql = "UPDATE pedido SET fechaEntrega = ?, estado = 'en proceso' WHERE idPedido = ?";
             PreparedStatement ps = con.prepareStatement(sql);
             Date fechaEntrega = new Date(System.currentTimeMillis());
             ps.setDate(1, fechaEntrega);
@@ -98,104 +100,216 @@ public class ControllerPedido {
     }
 
     public int obtenerPedidoActivo(int idUsuario) {
-        int idPedido = -1;
         try {
             String sql = "SELECT p.idPedido FROM pedido p " +
                          "JOIN usuario_tiene_pedido utp ON p.idPedido = utp.idPedido " +
-                         "WHERE utp.idUsuario = ? AND p.fechaEntrega IS NULL LIMIT 1";
-
+                         "WHERE utp.idUsuario = ? AND p.fechaEntrega IS NULL";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, idUsuario);
             ResultSet rs = ps.executeQuery();
-
+            int idPedido = -1;
             if (rs.next()) {
                 idPedido = rs.getInt("idPedido");
             }
-
             rs.close();
             ps.close();
+            return idPedido;
         } catch (SQLException e) {
             e.printStackTrace();
+            return -1;
         }
+    }
 
-        return idPedido;
+    public int obtenerUltimoPedido(int idUsuario) {
+        try {
+            String sql = "SELECT p.idPedido FROM pedido p " +
+                         "JOIN usuario_tiene_pedido utp ON p.idPedido = utp.idPedido " +
+                         "WHERE utp.idUsuario = ? ORDER BY p.idPedido DESC LIMIT 1";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, idUsuario);
+            ResultSet rs = ps.executeQuery();
+            int idPedido = -1;
+            if (rs.next()) {
+                idPedido = rs.getInt("idPedido");
+            }
+            rs.close();
+            ps.close();
+            return idPedido;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
     }
 
     public DefaultTableModel obtenerResumenPedido(int idPedido) {
-        DefaultTableModel modelo = new DefaultTableModel();
-        modelo.setColumnIdentifiers(new Object[] {
-            "ID Pedido", "Fecha Pedido", "ID Mineral", "Nombre Mineral", "Cantidad", "Precio Unitario", "Pureza", "Subtotal"
-        });
-
-        String sql = "SELECT p.idPedido, p.fechaPedido, m.idMineral, m.tipo, ptm.cantidad, m.precio, m.pureza, " +
-                     "(ptm.cantidad * m.precio) AS subtotal " +
-                     "FROM Pedido p " +
-                     "JOIN pedido_tiene_mineral ptm ON p.idPedido = ptm.idPedido " +
-                     "JOIN Mineral m ON ptm.idMineral = m.idMineral " +
-                     "WHERE p.idPedido = ?";
+        String[] columnas = {"ID Mineral", "Tipo", "Cantidad", "Peso", "Precio", "Descuento", "Pureza", "Subtotal"};
+        DefaultTableModel modelo = new DefaultTableModel(null, columnas);
 
         try {
-            PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setInt(1, idPedido);
-            ResultSet rs = stmt.executeQuery();
+            String sql = "SELECT m.idMineral, m.tipo, ptm.cantidad, m.peso, m.precio, m.descuento, m.pureza, " +
+                         "(m.precio * ptm.cantidad * (1 - m.descuento / 100)) AS subtotal " +
+                         "FROM pedido_tiene_mineral ptm " +
+                         "JOIN mineral m ON ptm.idMineral = m.idMineral " +
+                         "WHERE ptm.idPedido = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, idPedido);
+            ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                Object[] fila = new Object[] {
-                    rs.getInt("idPedido"),
-                    rs.getDate("fechaPedido"),
-                    rs.getInt("idMineral"),
-                    rs.getString("tipo"),
-                    rs.getInt("cantidad"),
-                    rs.getDouble("precio"),
-                    rs.getDouble("pureza") + "%",
-                    rs.getDouble("subtotal")
-                };
+                Object[] fila = new Object[8];
+                fila[0] = rs.getInt("idMineral");
+                fila[1] = rs.getString("tipo");
+                fila[2] = rs.getInt("cantidad");
+                fila[3] = rs.getDouble("peso");
+                fila[4] = rs.getDouble("precio");
+                fila[5] = rs.getDouble("descuento") + "%";
+                fila[6] = rs.getInt("pureza") + "%";
+                fila[7] = rs.getDouble("subtotal");
                 modelo.addRow(fila);
             }
-
             rs.close();
-            stmt.close();
+            ps.close();
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return modelo;
     }
 
     public String[] obtenerFechasPedido(int idPedido) {
-        String[] fechas = new String[2]; 
         try {
             String sql = "SELECT fechaPedido, fechaEntrega FROM pedido WHERE idPedido = ?";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, idPedido);
             ResultSet rs = ps.executeQuery();
+            String[] fechas = new String[]{"", ""};
             if (rs.next()) {
-                fechas[0] = String.valueOf(rs.getDate("fechaPedido"));
-                fechas[1] = String.valueOf(rs.getDate("fechaEntrega"));
+                fechas[0] = rs.getDate("fechaPedido") != null ? rs.getDate("fechaPedido").toString() : "";
+                fechas[1] = rs.getDate("fechaEntrega") != null ? rs.getDate("fechaEntrega").toString() : "";
+            }
+            rs.close();
+            ps.close();
+            return fechas;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new String[]{"", ""};
+        }
+    }
+
+    public boolean actualizarFechaEntrega(int idPedido, Date fechaEntrega) {
+        try {
+            String sql = "UPDATE pedido SET fechaEntrega = ? WHERE idPedido = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setDate(1, fechaEntrega);
+            ps.setInt(2, idPedido);
+            int filas = ps.executeUpdate();
+            ps.close();
+            return filas > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean actualizarEstadoPedido(int idPedido, String estado) {
+        try {
+            String sql = "UPDATE pedido SET estado = ? WHERE idPedido = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, estado);
+            ps.setInt(2, idPedido);
+            int filas = ps.executeUpdate();
+            ps.close();
+            return filas > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // Método nuevo para obtener el estado de un pedido
+    public String obtenerEstadoPedido(int idPedido) {
+        String estado = "";
+        try {
+            String sql = "SELECT estado FROM pedido WHERE idPedido = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, idPedido);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                estado = rs.getString("estado");
             }
             rs.close();
             ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return fechas;
+        return estado;
     }
 
-    public int obtenerUltimoPedido(int idUsuario) {
-        int idPedido = -1;
+    public DefaultTableModel obtenerPedidosConFiltros(Integer idPedidoFiltro, String estadoFiltro) {
+        String[] columnas = {"ID Pedido", "Cliente", "Tipo", "Pureza", "Cantidad", "Subtotal", "Estado", "Entrega"};
+        DefaultTableModel modelo = new DefaultTableModel(null, columnas);
+
         try {
-            String sql = "SELECT p.idPedido FROM pedido p " +
+            StringBuilder sql = new StringBuilder("SELECT p.idPedido, u.nombre, m.tipo, m.pureza, ptm.cantidad, " +
+                    "(m.precio * ptm.cantidad * (1 - m.descuento / 100)) AS subtotal, p.estado, p.fechaEntrega " +
+                    "FROM pedido p " +
+                    "JOIN usuario_tiene_pedido utp ON p.idPedido = utp.idPedido " +
+                    "JOIN usuario u ON u.id = utp.idUsuario " +
+                    "JOIN pedido_tiene_mineral ptm ON p.idPedido = ptm.idPedido " +
+                    "JOIN mineral m ON ptm.idMineral = m.idMineral WHERE 1=1 ");
+
+            if (idPedidoFiltro != null) {
+                sql.append(" AND p.idPedido = ").append(idPedidoFiltro);
+            }
+            if (estadoFiltro != null) {
+                sql.append(" AND p.estado = '").append(estadoFiltro).append("'");
+            }
+
+            sql.append(" ORDER BY p.idPedido DESC");
+
+            PreparedStatement ps = con.prepareStatement(sql.toString());
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Object[] fila = new Object[8];
+                fila[0] = rs.getInt("idPedido");
+                fila[1] = rs.getString("nombre");
+                fila[2] = rs.getString("tipo");
+                fila[3] = rs.getInt("pureza") + "%";
+                fila[4] = rs.getInt("cantidad");
+                fila[5] = rs.getDouble("subtotal");
+                fila[6] = rs.getString("estado");
+                fila[7] = rs.getDate("fechaEntrega");
+                modelo.addRow(fila);
+            }
+            rs.close();
+            ps.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return modelo;
+    }
+
+    public ArrayList<int[]> obtenerListaPedidosDeUsuario(int idUsuario) {
+        ArrayList<int[]> lista = new ArrayList<>();
+        try {
+            String sql = "SELECT p.idPedido, " +
+                         "CASE p.estado " +
+                         "WHEN 'pendiente' THEN 1 " +
+                         "WHEN 'en proceso' THEN 2 " +
+                         "WHEN 'finalizado' THEN 3 " +
+                         "WHEN 'cancelado' THEN 4 ELSE 0 END as estadoNum " +
+                         "FROM pedido p " +
                          "JOIN usuario_tiene_pedido utp ON p.idPedido = utp.idPedido " +
-                         "WHERE utp.idUsuario = ? " +
-                         "ORDER BY p.fechaPedido DESC LIMIT 1";
+                         "WHERE utp.idUsuario = ? ORDER BY p.idPedido DESC";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, idUsuario);
             ResultSet rs = ps.executeQuery();
 
-            if (rs.next()) {
-                idPedido = rs.getInt("idPedido");
+            while (rs.next()) {
+                lista.add(new int[]{rs.getInt("idPedido"), rs.getInt("estadoNum")});
             }
 
             rs.close();
@@ -203,53 +317,62 @@ public class ControllerPedido {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return idPedido;
+        return lista;
     }
-
-    // Método para obtener pedidos con estado específico
+    
     public DefaultTableModel obtenerPedidosConDetalles(String estadoFiltro) {
         DefaultTableModel modelo = new DefaultTableModel();
         modelo.setColumnIdentifiers(new Object[] {
-            "ID Pedido", "Cliente", "Mineral", "Pureza", "Cantidad", "Subtotal", "Estado", "Fecha Entrega"
+            "ID Pedido", "Cliente", "Tipo Mineral", "Pureza", "Cantidad", "Subtotal", "Estado", "Fecha Entrega"
         });
 
-        String sql = "SELECT p.idPedido, u.nombre AS cliente, m.tipo AS mineral, m.pureza, ptm.cantidad, " +
-                     "(ptm.cantidad * m.precio) AS subtotal, p.estado, p.fechaEntrega " +
-                     "FROM pedido p " +
-                     "JOIN usuario_tiene_pedido utp ON p.idPedido = utp.idPedido " +
-                     "JOIN usuario u ON utp.idUsuario = u.id " +
-                     "JOIN pedido_tiene_mineral ptm ON p.idPedido = ptm.idPedido " +
-                     "JOIN mineral m ON ptm.idMineral = m.idMineral";
-
-        if (estadoFiltro != null && !estadoFiltro.equalsIgnoreCase("Todos")) {
-            sql += " WHERE p.estado = ?";
-        }
-
-        sql += " ORDER BY p.idPedido";
-
         try {
-            PreparedStatement stmt = con.prepareStatement(sql);
-            if (estadoFiltro != null && !estadoFiltro.equalsIgnoreCase("Todos")) {
-                stmt.setString(1, estadoFiltro);
+            String sql = "SELECT p.idPedido, u.nombre, m.tipo, m.pureza, ptm.cantidad, " +
+                         "(m.precio * ptm.cantidad) AS subtotal, p.estado, p.fechaEntrega " +
+                         "FROM pedido p " +
+                         "JOIN usuario_tiene_pedido utp ON p.idPedido = utp.idPedido " +
+                         "JOIN usuario u ON utp.idUsuario = u.id " +
+                         "JOIN pedido_tiene_mineral ptm ON p.idPedido = ptm.idPedido " +
+                         "JOIN mineral m ON ptm.idMineral = m.idMineral ";
+
+            if (estadoFiltro != null && !estadoFiltro.isEmpty() && !estadoFiltro.equals("Todos")) {
+                sql += "WHERE p.estado = ? ";
             }
-            ResultSet rs = stmt.executeQuery();
+            sql += "ORDER BY p.idPedido DESC";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            if (estadoFiltro != null && !estadoFiltro.isEmpty() && !estadoFiltro.equals("Todos")) {
+                ps.setString(1, estadoFiltro);
+            }
+
+            ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                modelo.addRow(new Object[] {
-                    rs.getInt("idPedido"),
-                    rs.getString("cliente"),
-                    rs.getString("mineral"),
-                    rs.getDouble("pureza") + "%",
-                    rs.getInt("cantidad"),
-                    rs.getDouble("subtotal"),
-                    rs.getString("estado"),
-                    rs.getDate("fechaEntrega")
-                });
+                Object[] fila = new Object[8];
+                fila[0] = rs.getInt("idPedido");
+                fila[1] = rs.getString("nombre");
+                fila[2] = rs.getString("tipo");
+                fila[3] = rs.getDouble("pureza");
+                fila[4] = rs.getInt("cantidad");
+                fila[5] = rs.getDouble("subtotal");
+                String estado = rs.getString("estado");
+                fila[6] = estado;
+
+                Date fechaEntrega = rs.getDate("fechaEntrega");
+                // Si estado es pendiente o en proceso y fechaEntrega es null, mostrar "A despachar"
+                if ((estado.equals("pendiente") || estado.equals("en proceso")) && fechaEntrega == null) {
+                    fila[7] = "A despachar";
+                } else {
+                    fila[7] = fechaEntrega != null ? fechaEntrega.toString() : "";
+                }
+
+                modelo.addRow(fila);
             }
 
             rs.close();
-            stmt.close();
+            ps.close();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -257,152 +380,51 @@ public class ControllerPedido {
         return modelo;
     }
 
+    public DefaultTableModel obtenerResumenPedidoConEstadoYFechaEspecial(int idPedido) {
+        String[] columnas = {"ID Mineral", "Tipo", "Cantidad", "Peso", "Precio", "Descuento", "Pureza", "Estado Pedido", "Fecha Entrega", "Subtotal"};
+        DefaultTableModel modelo = new DefaultTableModel(null, columnas);
 
-    // Método para actualizar el estado de un pedido
-    public boolean actualizarEstadoPedido(int idPedido, String nuevoEstado) {
         try {
-            String sql = "UPDATE pedido SET estado = ? WHERE idPedido = ?";
+            String sql = "SELECT m.idMineral, m.tipo, ptm.cantidad, m.peso, m.precio, m.descuento, m.pureza, p.estado, p.fechaEntrega, " +
+                         "(m.precio * ptm.cantidad * (1 - m.descuento / 100)) AS subtotal " +
+                         "FROM pedido_tiene_mineral ptm " +
+                         "JOIN mineral m ON ptm.idMineral = m.idMineral " +
+                         "JOIN pedido p ON ptm.idPedido = p.idPedido " +
+                         "WHERE ptm.idPedido = ?";
+
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, nuevoEstado);
-            ps.setInt(2, idPedido);
-            int rows = ps.executeUpdate();
-            ps.close();
-            return rows > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-    
-    public DefaultTableModel obtenerPedidosConFiltros(String estadoFiltro, String fechaEntregaFiltro) {
-        DefaultTableModel modelo = new DefaultTableModel();
-        modelo.setColumnIdentifiers(new Object[]{
-            "ID Pedido", "Cliente", "Mineral", "Pureza", "Cantidad", "Subtotal", "Estado", "Fecha Entrega"
-        });
-
-        String sql = "SELECT p.idPedido, u.nombre AS cliente, m.tipo AS mineral, m.pureza, ptm.cantidad, " +
-                     "(ptm.cantidad * m.precio) AS subtotal, p.estado, p.fechaEntrega " +
-                     "FROM pedido p " +
-                     "JOIN usuario_tiene_pedido utp ON p.idPedido = utp.idPedido " +
-                     "JOIN usuario u ON utp.idUsuario = u.id " +
-                     "JOIN pedido_tiene_mineral ptm ON p.idPedido = ptm.idPedido " +
-                     "JOIN mineral m ON ptm.idMineral = m.idMineral " +
-                     "WHERE 1=1 ";
-
-        // Agregar filtros dinámicos
-        if (estadoFiltro != null && !estadoFiltro.equalsIgnoreCase("Todos")) {
-            sql += " AND p.estado = ?";
-        }
-        if (fechaEntregaFiltro != null && !fechaEntregaFiltro.isEmpty()) {
-            sql += " AND p.fechaEntrega = ?";
-        }
-
-        sql += " ORDER BY p.idPedido";
-
-        try {
-            PreparedStatement stmt = con.prepareStatement(sql);
-            int paramIndex = 1;
-            if (estadoFiltro != null && !estadoFiltro.equalsIgnoreCase("Todos")) {
-                stmt.setString(paramIndex++, estadoFiltro);
-            }
-            if (fechaEntregaFiltro != null && !fechaEntregaFiltro.isEmpty()) {
-                stmt.setDate(paramIndex++, Date.valueOf(fechaEntregaFiltro));
-            }
-            ResultSet rs = stmt.executeQuery();
+            ps.setInt(1, idPedido);
+            ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                modelo.addRow(new Object[]{
-                    rs.getInt("idPedido"),
-                    rs.getString("cliente"),
-                    rs.getString("mineral"),
-                    rs.getDouble("pureza") + "%",
-                    rs.getInt("cantidad"),
-                    rs.getDouble("subtotal"),
-                    rs.getString("estado"),
-                    rs.getDate("fechaEntrega")
-                });
+                Object[] fila = new Object[10];
+                fila[0] = rs.getInt("idMineral");
+                fila[1] = rs.getString("tipo");
+                fila[2] = rs.getInt("cantidad");
+                fila[3] = rs.getDouble("peso");
+                fila[4] = rs.getDouble("precio");
+                fila[5] = rs.getDouble("descuento") + "%";
+                fila[6] = rs.getInt("pureza") + "%";
+                fila[7] = rs.getString("estado");
+                // Fecha de entrega con condición
+                String estado = rs.getString("estado");
+                java.sql.Date fechaEntrega = rs.getDate("fechaEntrega");
+                if ((estado.equalsIgnoreCase("pendiente") || estado.equalsIgnoreCase("en proceso")) && fechaEntrega == null) {
+                    fila[8] = "A despachar";
+                } else {
+                    fila[8] = fechaEntrega != null ? fechaEntrega.toString() : "-";
+                }
+                fila[9] = rs.getDouble("subtotal");
+
+                modelo.addRow(fila);
             }
 
             rs.close();
-            stmt.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return modelo;
-    }
-
-    public boolean actualizarFechaEntrega(int idPedido, Date nuevaFechaEntrega) {
-        try {
-            String sql = "UPDATE pedido SET fechaEntrega = ? WHERE idPedido = ?";
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setDate(1, nuevaFechaEntrega);
-            ps.setInt(2, idPedido);
-            int rows = ps.executeUpdate();
             ps.close();
-            return rows > 0;
+
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
-    }
-    
-    public DefaultTableModel obtenerPedidosConFiltros(Integer idPedidoFiltro, String estadoFiltro) {
-        DefaultTableModel modelo = new DefaultTableModel();
-        modelo.setColumnIdentifiers(new Object[]{
-            "ID Pedido", "Cliente", "Mineral", "Pureza", "Cantidad", "Subtotal", "Estado", "Fecha Entrega"
-        });
-
-        String sql = "SELECT p.idPedido, u.nombre AS cliente, m.tipo AS mineral, m.pureza, ptm.cantidad, " +
-                     "(ptm.cantidad * m.precio) AS subtotal, p.estado, p.fechaEntrega " +
-                     "FROM pedido p " +
-                     "JOIN usuario_tiene_pedido utp ON p.idPedido = utp.idPedido " +
-                     "JOIN usuario u ON utp.idUsuario = u.id " +
-                     "JOIN pedido_tiene_mineral ptm ON p.idPedido = ptm.idPedido " +
-                     "JOIN mineral m ON ptm.idMineral = m.idMineral " +
-                     "WHERE 1=1 ";
-
-        if (idPedidoFiltro != null) {
-            sql += " AND p.idPedido = ?";
-        }
-        if (estadoFiltro != null && !estadoFiltro.equalsIgnoreCase("Todos")) {
-            sql += " AND p.estado = ?";
-        }
-
-        sql += " ORDER BY p.idPedido";
-
-        try {
-            PreparedStatement stmt = con.prepareStatement(sql);
-
-            int paramIndex = 1;
-            if (idPedidoFiltro != null) {
-                stmt.setInt(paramIndex++, idPedidoFiltro);
-            }
-            if (estadoFiltro != null && !estadoFiltro.equalsIgnoreCase("Todos")) {
-                stmt.setString(paramIndex++, estadoFiltro);
-            }
-
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                modelo.addRow(new Object[]{
-                    rs.getInt("idPedido"),
-                    rs.getString("cliente"),
-                    rs.getString("mineral"),
-                    rs.getDouble("pureza") + "%",
-                    rs.getInt("cantidad"),
-                    rs.getDouble("subtotal"),
-                    rs.getString("estado"),
-                    rs.getDate("fechaEntrega")
-                });
-            }
-
-            rs.close();
-            stmt.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         return modelo;
     }
 

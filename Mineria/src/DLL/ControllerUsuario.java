@@ -37,13 +37,23 @@ public class ControllerUsuario {
                 switch (tipo.toLowerCase()) {
                     case "cliente":
                         usuario = new Cliente(id, nombre, apellido, tipo, email, password);
+
+                        // ✅ Crear pedido si no tiene uno activo
+                        ControllerPedido controllerPedido = new ControllerPedido();
+                        int idPedido = controllerPedido.obtenerPedidoActivo(id);
+                        if (idPedido == -1) {
+                            controllerPedido.crearPedido(id);
+                        }
                         break;
+
                     case "operador":
                         usuario = new Operador(id, nombre, apellido, tipo, email, password);
                         break;
+
                     case "encargado":
                         usuario = new Encargado_Venta(id, nombre, apellido, tipo, email, password);
                         break;
+
                     default:
                         System.out.println("Tipo de usuario desconocido: " + tipo);
                         break;
@@ -77,7 +87,6 @@ public class ControllerUsuario {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            // Podrías lanzar RuntimeException si querés propagar error
         }
     }
 
