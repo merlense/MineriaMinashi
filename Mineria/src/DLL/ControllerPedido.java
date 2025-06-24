@@ -346,5 +346,64 @@ public class ControllerPedido {
             return false;
         }
     }
+    
+    public DefaultTableModel obtenerPedidosConFiltros(Integer idPedidoFiltro, String estadoFiltro) {
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.setColumnIdentifiers(new Object[]{
+            "ID Pedido", "Cliente", "Mineral", "Pureza", "Cantidad", "Subtotal", "Estado", "Fecha Entrega"
+        });
+
+        String sql = "SELECT p.idPedido, u.nombre AS cliente, m.tipo AS mineral, m.pureza, ptm.cantidad, " +
+                     "(ptm.cantidad * m.precio) AS subtotal, p.estado, p.fechaEntrega " +
+                     "FROM pedido p " +
+                     "JOIN usuario_tiene_pedido utp ON p.idPedido = utp.idPedido " +
+                     "JOIN usuario u ON utp.idUsuario = u.id " +
+                     "JOIN pedido_tiene_mineral ptm ON p.idPedido = ptm.idPedido " +
+                     "JOIN mineral m ON ptm.idMineral = m.idMineral " +
+                     "WHERE 1=1 ";
+
+        if (idPedidoFiltro != null) {
+            sql += " AND p.idPedido = ?";
+        }
+        if (estadoFiltro != null && !estadoFiltro.equalsIgnoreCase("Todos")) {
+            sql += " AND p.estado = ?";
+        }
+
+        sql += " ORDER BY p.idPedido";
+
+        try {
+            PreparedStatement stmt = con.prepareStatement(sql);
+
+            int paramIndex = 1;
+            if (idPedidoFiltro != null) {
+                stmt.setInt(paramIndex++, idPedidoFiltro);
+            }
+            if (estadoFiltro != null && !estadoFiltro.equalsIgnoreCase("Todos")) {
+                stmt.setString(paramIndex++, estadoFiltro);
+            }
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                modelo.addRow(new Object[]{
+                    rs.getInt("idPedido"),
+                    rs.getString("cliente"),
+                    rs.getString("mineral"),
+                    rs.getDouble("pureza") + "%",
+                    rs.getInt("cantidad"),
+                    rs.getDouble("subtotal"),
+                    rs.getString("estado"),
+                    rs.getDate("fechaEntrega")
+                });
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return modelo;
+    }
 
 }

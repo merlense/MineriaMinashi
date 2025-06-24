@@ -56,6 +56,11 @@ public class ControllerUsuario {
     }
 
     public void agregarUsuario(Usuario usuario) {
+        // Validar que el email termine con @gmail.com
+        if (usuario.getEmail() == null || !usuario.getEmail().toLowerCase().endsWith("@gmail.com")) {
+            throw new IllegalArgumentException("El email debe terminar con '@gmail.com'.");
+        }
+
         try {
             PreparedStatement stmt = con.prepareStatement(
                 "INSERT INTO usuario (nombre, apellido, tipo, email, password) VALUES (?, ?, ?, ?, ?)"
@@ -72,6 +77,7 @@ public class ControllerUsuario {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            // Podrías lanzar RuntimeException si querés propagar error
         }
     }
 
