@@ -210,6 +210,8 @@ public class ControllerPedido {
             return false;
         }
     }
+    
+    // ENVIO PARA ARREGLO
 
     public boolean actualizarEstadoPedido(int idPedido, String estado) {
         try {
