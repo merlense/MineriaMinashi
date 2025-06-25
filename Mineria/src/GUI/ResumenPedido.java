@@ -27,7 +27,7 @@ public class ResumenPedido extends JFrame {
         this.usuario = usuario;
         setTitle("Resumen de Pedido");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setBounds(100, 100, 900, 500);
+        setBounds(100, 100, 900, 533);
         setLocationRelativeTo(null);
 
         contentPane = new JPanel();
@@ -119,25 +119,24 @@ public class ResumenPedido extends JFrame {
     private void cargarPedidoPorId(int idPedido) {
         ControllerPedido controller = new ControllerPedido();
 
-        // Obtener resumen con estado y fecha entrega personalizada
         DefaultTableModel modelo = controller.obtenerResumenPedidoConEstadoYFechaEspecial(idPedido);
         table.setModel(modelo);
 
-        // Calcular total (asumiendo subtotal en columna 8)
         double total = 0.0;
+        int colSubtotal = modelo.findColumn("Subtotal");
+
         for (int i = 0; i < modelo.getRowCount(); i++) {
-            Object valor = modelo.getValueAt(i, 8);
+            Object valor = modelo.getValueAt(i, colSubtotal);
             if (valor instanceof Number) {
                 total += ((Number) valor).doubleValue();
             }
         }
         lblTotal.setText("Total: $" + total);
 
-        // Obtener fechas
+
         String[] fechas = controller.obtenerFechasPedido(idPedido);
         String fechaPedidoStr = (fechas[0] != null && !fechas[0].isEmpty()) ? fechas[0] : "Sin fecha";
 
-        // Obtener estado para decidir qué mostrar en fechaEntrega
         String estado = controller.obtenerEstadoPedido(idPedido);
 
         String fechaEntregaStr;

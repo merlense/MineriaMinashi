@@ -82,14 +82,12 @@ public class ControllerPedido {
             return false;
         }
     }
-
+    
     public boolean finalizarPedido(int idPedido) {
         try {
-            String sql = "UPDATE pedido SET fechaEntrega = ?, estado = 'en proceso' WHERE idPedido = ?";
+            String sql = "UPDATE pedido SET fechaEntrega = NULL, estado = 'en proceso' WHERE idPedido = ?";
             PreparedStatement ps = con.prepareStatement(sql);
-            Date fechaEntrega = new Date(System.currentTimeMillis());
-            ps.setDate(1, fechaEntrega);
-            ps.setInt(2, idPedido);
+            ps.setInt(1, idPedido);
             int rows = ps.executeUpdate();
             ps.close();
             return rows > 0;
@@ -98,6 +96,7 @@ public class ControllerPedido {
             return false;
         }
     }
+
 
     public int obtenerPedidoActivo(int idUsuario) {
         try {
@@ -321,6 +320,7 @@ public class ControllerPedido {
         }
         return lista;
     }
+
     
     public DefaultTableModel obtenerPedidosConDetalles(String estadoFiltro) {
         DefaultTableModel modelo = new DefaultTableModel();
@@ -429,5 +429,68 @@ public class ControllerPedido {
         }
         return modelo;
     }
+    
+    
+    
+    public DefaultTableModel obtenerPedidosPorTipoUsuario(String tipoUsuario, String estadoFiltro) {
+        DefaultTableModel modelo = new DefaultTableModel(
+            new Object[]{"ID Pedido", "Usuario", "Tipo Mineral", "Pureza", "Cantidad", "Estado", "Entrega"}, 0);
+
+        try {
+            StringBuilder sql = new StringBuilder(
+                "SELECT p.idPedido, u.nombre AS usuario, m.tipo, m.pureza, ptm.cantidad, p.estado, p.fechaEntrega " +
+                "FROM pedido p " +
+                "JOIN usuario_tiene_pedido utp ON p.idPedido = utp.idPedido " +
+                "JOIN usuario u ON u.id = utp.idUsuario " +
+                "JOIN pedido_tiene_mineral ptm ON p.idPedido = ptm.idPedido " +
+                "JOIN mineral m ON ptm.idMineral = m.idMineral " +
+                "WHERE u.tipo = ? "
+            );
+
+            if (estadoFiltro != null && !estadoFiltro.isEmpty()) {
+                sql.append(" AND p.estado = ? ");
+            }
+
+            sql.append(" ORDER BY p.idPedido DESC");
+
+            PreparedStatement ps = con.prepareStatement(sql.toString());
+            ps.setString(1, tipoUsuario);
+
+            if (estadoFiltro != null && !estadoFiltro.isEmpty()) {
+                ps.setString(2, estadoFiltro);
+            }
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Object[] fila = new Object[7];
+                fila[0] = rs.getInt("idPedido");
+                fila[1] = rs.getString("usuario");
+                fila[2] = rs.getString("tipo");
+                fila[3] = rs.getInt("pureza") + "%";
+                fila[4] = rs.getInt("cantidad");
+                fila[5] = rs.getString("estado");
+                java.sql.Date fechaEntrega = rs.getDate("fechaEntrega");
+                fila[6] = fechaEntrega != null ? fechaEntrega.toString() : "A despachar";
+
+                modelo.addRow(fila);
+            }
+
+            rs.close();
+            ps.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return modelo;
+    }
+
+
+
+
+
+  
+
 
 }

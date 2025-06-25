@@ -106,7 +106,7 @@ public class PantallaPrincipal extends JFrame {
 		                    new HomeCliente(usuario).setVisible(true);
 		                    break;
 		                case "operador":
-		                    new HomeOperador().setVisible(true);
+		                    new HomeOperador(usuario).setVisible(true);
 		                    break;
 		                case "encargado":
 		                    new HomeEncargado(usuario).setVisible(true);

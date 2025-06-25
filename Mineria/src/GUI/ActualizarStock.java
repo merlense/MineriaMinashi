@@ -24,7 +24,7 @@ import BLL.Usuario;
 import DLL.ControllerMineral;
 import DLL.ControllerPedido;
 
-public class CatalogoOperador extends JFrame {
+public class ActualizarStock extends JFrame {
 
 	 private static final long serialVersionUID = 1L;
 	    private JPanel contentPane;
@@ -33,7 +33,7 @@ public class CatalogoOperador extends JFrame {
 
 
 	
-	public CatalogoOperador(Usuario  usuario) {
+	public ActualizarStock(Usuario  usuario) {
     	setIconImage(Toolkit.getDefaultToolkit().getImage(CatalogoCliente.class.getResource("/IMG/diamante-super-chico.png")));
         setTitle("Catálogo de Minerales");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

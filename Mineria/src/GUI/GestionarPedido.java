@@ -3,6 +3,8 @@ package GUI;
 import DLL.ControllerPedido;
 import com.toedter.calendar.JDateChooser;
 
+import BLL.Usuario;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -14,6 +16,7 @@ public class GestionarPedido extends JFrame {
 
     private JPanel contentPane;
     private JTable tabla;
+    private Usuario usuario;
     private JComboBox<String> filtroEstadoCombo;
     private JTextField filtroIdPedidoText;
     private JComboBox<String> estadoCombo;
@@ -22,7 +25,8 @@ public class GestionarPedido extends JFrame {
 
     private int idPedidoSeleccionado = -1;
 
-    public GestionarPedido() {
+    public GestionarPedido(Usuario usuario) {
+    	setIconImage(Toolkit.getDefaultToolkit().getImage(GestionarPedido.class.getResource("/IMG/aldeano.jpg")));
         setTitle("Gestionar pedidos - Encargado");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setBounds(100, 100, 1000, 639);
@@ -91,11 +95,17 @@ public class GestionarPedido extends JFrame {
         btnGuardarEstado.setBounds(250, 510, 150, 30);
         contentPane.add(btnGuardarEstado);
 
-        JButton btnSalir = new JButton("Salir");
+        JButton btnSalir = new JButton("Volver");
         btnSalir.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        btnSalir.setBounds(420, 560, 100, 30);
+        btnSalir.setBounds(826, 562, 150, 30);
         contentPane.add(btnSalir);
-        btnSalir.addActionListener(e -> dispose());
+
+        btnSalir.addActionListener(e -> {
+            HomeEncargado home = new HomeEncargado(usuario);
+            home.setVisible(true);
+            dispose();
+        });
+        
 
         btnFiltrar.addActionListener(e -> cargarPedidos());
 
@@ -116,6 +126,11 @@ public class GestionarPedido extends JFrame {
                     }
                     String estadoActual = tabla.getValueAt(fila, 6).toString();
                     estadoCombo.setSelectedItem(estadoActual);
+                    
+                    JLabel lblNewLabel = new JLabel("");
+                    lblNewLabel.setIcon(new ImageIcon(GestionarPedido.class.getResource("/IMG/picoDiamanteChico.png")));
+                    lblNewLabel.setBounds(868, 452, 102, 110);
+                    contentPane.add(lblNewLabel);
                 }
             }
         });
