@@ -98,38 +98,48 @@ public class AgregarAlCarrito extends JFrame {
                 }
 
                 ControllerMineral controladorMineral = new ControllerMineral();
-                boolean exito = controladorMineral.restarCantidad(idMineral, cantidadSeleccionada);
+                int stockActual = controladorMineral.getStock(idMineral);
 
-                if (exito) {
-                    ControllerPedido controllerPedido = new ControllerPedido();
+                ControllerPedido controllerPedido = new ControllerPedido();
+                int idPedido = controllerPedido.obtenerPedidoActivo(usuario.getId());
+                if (idPedido == -1) {
+                    idPedido = controllerPedido.crearPedido(usuario.getId());
+                }
 
-                    // Obtener pedido activo o crear si no existe
-                    int idPedido = controllerPedido.obtenerPedidoActivo(usuario.getId());
-                    if (idPedido == -1) {
-                        idPedido = controllerPedido.crearPedido(usuario.getId());
+                if (cantidadSeleccionada <= stockActual && stockActual > 0) {
+                    boolean exitoResta = controladorMineral.restarCantidad(idMineral, cantidadSeleccionada);
+                    if (!exitoResta) {
+                        JOptionPane.showMessageDialog(null, "Error al actualizar stock.");
+                        return;
                     }
-
                     boolean agregado = controllerPedido.agregarMineralAPedido(idPedido, idMineral, cantidadSeleccionada);
-
                     if (agregado) {
                         JOptionPane.showMessageDialog(null, "Mineral agregado al pedido correctamente.");
                         dispose();
-
-                        if (onFinalizarCallback != null) {
-                            onFinalizarCallback.run();
-                        }
+                        if (onFinalizarCallback != null) onFinalizarCallback.run();
                     } else {
                         JOptionPane.showMessageDialog(null, "Error al agregar mineral al pedido.");
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "No hay suficiente stock disponible.");
+                    // Mostrar mensaje de descuento
+                    JOptionPane.showMessageDialog(null, "10% de descuento por bajo stock.");
+
+                    // Agregar mineral igual, sin manejar descuento en la BD
+                    boolean agregado = controllerPedido.agregarMineralAPedido(idPedido, idMineral, cantidadSeleccionada);
+                    if (agregado) {
+                        dispose();
+                        if (onFinalizarCallback != null) onFinalizarCallback.run();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Error al agregar mineral al pedido.");
+                    }
                 }
+
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(null, "Ingrese una cantidad válida.");
             }
         });
     }
-
+    
     public void setDatosMineral(int idMineral, String nombre, int cantidad, double peso, double precio) {
         this.idMineral = idMineral;
         txID.setText(String.valueOf(idMineral));
@@ -142,4 +152,5 @@ public class AgregarAlCarrito extends JFrame {
     public void setOnFinalizar(Runnable callback) {
         this.onFinalizarCallback = callback;
     }
+
 }

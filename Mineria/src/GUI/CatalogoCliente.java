@@ -138,18 +138,28 @@ public class CatalogoCliente extends JFrame {
         
         btnNewButton_1.addActionListener(e -> {
             ControllerPedido controllerPedido = new ControllerPedido();
-            int idPedido = controllerPedido.crearPedido(usuario.getId());
-            boolean finalizado = controllerPedido.finalizarPedido(idPedido);
+            // Primero obtengo el pedido activo (pendiente)
+            int pedidoActivo = controllerPedido.obtenerPedidoActivo(usuario.getId());
 
-            if (finalizado) {
-                JOptionPane.showMessageDialog(null, "Pedido finalizado con éxito.");
-                HomeCliente home = new HomeCliente(usuario);
-                home.setVisible(true);                        
-                dispose();                                   
+            if (pedidoActivo != -1) {
+                boolean finalizado = controllerPedido.finalizarPedido(pedidoActivo);
+
+                if (finalizado) {
+                    // Ahora creo un nuevo pedido para que quede listo
+                    int nuevoPedido = controllerPedido.crearPedido(usuario.getId());
+                    JOptionPane.showMessageDialog(null, "Pedido finalizado con éxito. Nuevo pedido creado.");
+
+                    HomeCliente home = new HomeCliente(usuario);
+                    home.setVisible(true);
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se pudo finalizar el pedido.");
+                }
             } else {
-                JOptionPane.showMessageDialog(null, "No se pudo finalizar el pedido.");
+                JOptionPane.showMessageDialog(null, "No hay pedido activo para finalizar.");
             }
         });
+
 
         
         

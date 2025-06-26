@@ -41,14 +41,23 @@ public class ControllerMineral {
 
     public boolean restarCantidad(int idMineral, int cantidadARestar) {
         try {
-            PreparedStatement ps1 = con.prepareStatement("SELECT unidades FROM mineral WHERE idMineral = ?");
+            PreparedStatement ps1 = con.prepareStatement("SELECT unidades, descuento FROM mineral WHERE idMineral = ?");
             ps1.setInt(1, idMineral);
             ResultSet rs = ps1.executeQuery();
 
             if (rs.next()) {
                 int cantidadActual = rs.getInt("unidades");
+                int descuentoActual = rs.getInt("descuento");
 
                 if (cantidadARestar > cantidadActual) {
+                    if (descuentoActual < 10) {
+                        PreparedStatement psDesc = con.prepareStatement("UPDATE mineral SET descuento = 10 WHERE idMineral = ?");
+                        psDesc.setInt(1, idMineral);
+                        psDesc.executeUpdate();
+                        psDesc.close();
+                    }
+                    rs.close();
+                    ps1.close();
                     return false;
                 }
 
@@ -75,6 +84,7 @@ public class ControllerMineral {
             return false;
         }
     }
+
 
     public boolean insertarNuevoMineral(Mineral m) {
         try {
@@ -109,4 +119,37 @@ public class ControllerMineral {
             return false;
         }
     }
+    
+    public int getStock(int idMineral) {
+        try {
+            PreparedStatement ps = con.prepareStatement("SELECT unidades FROM mineral WHERE idMineral = ?");
+            ps.setInt(1, idMineral);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("unidades");
+            }
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public boolean actualizarDescuento(int idMineral, int nuevoDescuento) {
+        try {
+            PreparedStatement ps = con.prepareStatement("UPDATE mineral SET descuento = ? WHERE idMineral = ?");
+            ps.setInt(1, nuevoDescuento);
+            ps.setInt(2, idMineral);
+            int filas = ps.executeUpdate();
+            ps.close();
+            return filas > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    
+    
 }

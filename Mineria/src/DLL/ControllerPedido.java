@@ -85,7 +85,8 @@ public class ControllerPedido {
     
     public boolean finalizarPedido(int idPedido) {
         try {
-            String sql = "UPDATE pedido SET fechaEntrega = NULL, estado = 'en proceso' WHERE idPedido = ?";
+            // Solo actualizar el estado, la fechaEntrega se puede setear aparte si querés
+            String sql = "UPDATE pedido SET estado = 'en proceso' WHERE idPedido = ?";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, idPedido);
             int rows = ps.executeUpdate();
@@ -96,7 +97,6 @@ public class ControllerPedido {
             return false;
         }
     }
-
 
     public int obtenerPedidoActivo(int idUsuario) {
         try {
@@ -209,8 +209,6 @@ public class ControllerPedido {
             return false;
         }
     }
-    
-    // ENVIO PARA ARREGLO
 
     public boolean actualizarEstadoPedido(int idPedido, String estado) {
         try {
@@ -227,7 +225,6 @@ public class ControllerPedido {
         }
     }
 
-    // Método nuevo para obtener el estado de un pedido
     public String obtenerEstadoPedido(int idPedido) {
         String estado = "";
         try {
@@ -321,7 +318,6 @@ public class ControllerPedido {
         return lista;
     }
 
-    
     public DefaultTableModel obtenerPedidosConDetalles(String estadoFiltro) {
         DefaultTableModel modelo = new DefaultTableModel();
         modelo.setColumnIdentifiers(new Object[] {
@@ -362,7 +358,6 @@ public class ControllerPedido {
                 fila[6] = estado;
 
                 Date fechaEntrega = rs.getDate("fechaEntrega");
-                // Si estado es pendiente o en proceso y fechaEntrega es null, mostrar "A despachar"
                 if ((estado.equals("pendiente") || estado.equals("en proceso")) && fechaEntrega == null) {
                     fila[7] = "A despachar";
                 } else {
@@ -408,9 +403,8 @@ public class ControllerPedido {
                 fila[5] = rs.getDouble("descuento") + "%";
                 fila[6] = rs.getInt("pureza") + "%";
                 fila[7] = rs.getString("estado");
-                // Fecha de entrega con condición
                 String estado = rs.getString("estado");
-                java.sql.Date fechaEntrega = rs.getDate("fechaEntrega");
+                Date fechaEntrega = rs.getDate("fechaEntrega");
                 if ((estado.equalsIgnoreCase("pendiente") || estado.equalsIgnoreCase("en proceso")) && fechaEntrega == null) {
                     fila[8] = "A despachar";
                 } else {
@@ -429,9 +423,7 @@ public class ControllerPedido {
         }
         return modelo;
     }
-    
-    
-    
+
     public DefaultTableModel obtenerPedidosPorTipoUsuario(String tipoUsuario, String estadoFiltro) {
         DefaultTableModel modelo = new DefaultTableModel(
             new Object[]{"ID Pedido", "Usuario", "Tipo Mineral", "Pureza", "Cantidad", "Estado", "Entrega"}, 0);
@@ -470,7 +462,7 @@ public class ControllerPedido {
                 fila[3] = rs.getInt("pureza") + "%";
                 fila[4] = rs.getInt("cantidad");
                 fila[5] = rs.getString("estado");
-                java.sql.Date fechaEntrega = rs.getDate("fechaEntrega");
+                Date fechaEntrega = rs.getDate("fechaEntrega");
                 fila[6] = fechaEntrega != null ? fechaEntrega.toString() : "A despachar";
 
                 modelo.addRow(fila);
@@ -485,12 +477,5 @@ public class ControllerPedido {
 
         return modelo;
     }
-
-
-
-
-
-  
-
 
 }
