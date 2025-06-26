@@ -20,7 +20,7 @@ public class ControllerMineral {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                int idMineria = rs.getInt("idMineral");       
+                int idMineria = rs.getInt("idMineral");
                 String tipo = rs.getString("tipo");
                 int unidades = rs.getInt("unidades");
                 double peso = rs.getDouble("peso");
@@ -38,7 +38,7 @@ public class ControllerMineral {
         }
         return minerales;
     }
-    
+
     public boolean restarCantidad(int idMineral, int cantidadARestar) {
         try {
             PreparedStatement ps1 = con.prepareStatement("SELECT unidades FROM mineral WHERE idMineral = ?");
@@ -95,7 +95,18 @@ public class ControllerMineral {
             return false;
         }
     }
-
     
-   }
-
+    public boolean actualizarCantidad(int idMineral, int nuevaCantidad) {
+        try {
+            PreparedStatement ps = con.prepareStatement("UPDATE mineral SET unidades = ? WHERE idMineral = ?");
+            ps.setInt(1, nuevaCantidad);
+            ps.setInt(2, idMineral);
+            int filas = ps.executeUpdate();
+            ps.close();
+            return filas > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+}

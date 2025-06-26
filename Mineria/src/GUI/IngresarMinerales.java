@@ -5,17 +5,21 @@ import javax.swing.border.EmptyBorder;
 import java.awt.Font;
 import DLL.ControllerMineral;
 import BLL.Mineral;
+import BLL.Usuario;
 
 public class IngresarMinerales extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
     private JTextField txtTipo, txtUnidades, txtPeso, txtPureza, txtPrecio;
+    private Usuario usuario;
 
-    public IngresarMinerales() {
+    public IngresarMinerales(Usuario usuario) {
+        this.usuario = usuario;
+
         setTitle("Ingresar Mineral");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setBounds(100, 100, 400, 420);  // Altura reducida
+        setBounds(100, 100, 400, 480);  // Altura ajustada
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
         setContentPane(contentPane);
@@ -52,11 +56,15 @@ public class IngresarMinerales extends JFrame {
             y += 40;
         }
 
-        JButton btnGuardar = new JButton("GUARDAR");
-        btnGuardar.setBounds(130, y + 20, 120, 35);
-        contentPane.add(btnGuardar);
+        JButton btnIngresar = new JButton("Ingresar");
+        btnIngresar.setBounds(40, y + 20, 120, 35);
+        contentPane.add(btnIngresar);
 
-        btnGuardar.addActionListener(e -> {
+        JButton btnVolver = new JButton("Volver");
+        btnVolver.setBounds(200, y + 20, 120, 35);
+        contentPane.add(btnVolver);
+
+        btnIngresar.addActionListener(e -> {
             try {
                 String tipo = txtTipo.getText();
                 int unidades = Integer.parseInt(txtUnidades.getText());
@@ -64,13 +72,13 @@ public class IngresarMinerales extends JFrame {
                 double pureza = Double.parseDouble(txtPureza.getText());
                 double precio = Double.parseDouble(txtPrecio.getText());
 
-                // Creamos el mineral sin campo descuento (usamos 0 o cambiá tu constructor)
                 Mineral mineral = new Mineral(0, tipo, unidades, peso, pureza, precio, 0);
                 ControllerMineral controller = new ControllerMineral();
 
                 boolean exito = controller.insertarNuevoMineral(mineral);
                 if (exito) {
                     JOptionPane.showMessageDialog(null, "Mineral guardado correctamente.");
+                    new ReponerStock(usuario).setVisible(true);
                     dispose();
                 } else {
                     JOptionPane.showMessageDialog(null, "Error al guardar el mineral.");
@@ -78,6 +86,11 @@ public class IngresarMinerales extends JFrame {
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "Error en los datos ingresados. Verifique los campos.");
             }
+        });
+
+        btnVolver.addActionListener(e -> {
+            new ReponerStock(usuario).setVisible(true);
+            dispose();
         });
     }
 }

@@ -26,7 +26,7 @@ public class GestionarPedido extends JFrame {
     private int idPedidoSeleccionado = -1;
 
     public GestionarPedido(Usuario usuario) {
-    	setIconImage(Toolkit.getDefaultToolkit().getImage(GestionarPedido.class.getResource("/IMG/aldeano.jpg")));
+        setIconImage(Toolkit.getDefaultToolkit().getImage(GestionarPedido.class.getResource("/IMG/aldeano.jpg")));
         setTitle("Gestionar pedidos - Encargado");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setBounds(100, 100, 1000, 639);
@@ -77,6 +77,8 @@ public class GestionarPedido extends JFrame {
         dateChooser = new JDateChooser();
         dateChooser.setDateFormatString("dd/MM/yyyy");
         dateChooser.setBounds(10, 460, 150, 25);
+        
+        dateChooser.setMinSelectableDate(new java.util.Date());
         contentPane.add(dateChooser);
 
         btnGuardarFecha = new JButton("Guardar fecha");
@@ -105,7 +107,6 @@ public class GestionarPedido extends JFrame {
             home.setVisible(true);
             dispose();
         });
-        
 
         btnFiltrar.addActionListener(e -> cargarPedidos());
 
@@ -126,7 +127,7 @@ public class GestionarPedido extends JFrame {
                     }
                     String estadoActual = tabla.getValueAt(fila, 6).toString();
                     estadoCombo.setSelectedItem(estadoActual);
-                    
+
                     JLabel lblNewLabel = new JLabel("");
                     lblNewLabel.setIcon(new ImageIcon(GestionarPedido.class.getResource("/IMG/picoDiamanteChico.png")));
                     lblNewLabel.setBounds(868, 452, 102, 110);

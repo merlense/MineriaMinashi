@@ -33,65 +33,58 @@ public class VerPedidoOperador extends JFrame {
         setContentPane(contentPane);
         contentPane.setLayout(null);
 
-        // Tabla
         tablePedidos = new JTable();
         JScrollPane scrollPane = new JScrollPane(tablePedidos);
         scrollPane.setBounds(10, 10, 780, 350);
         contentPane.add(scrollPane);
 
-        // Label fecha explotación
         lblNewLabel = new JLabel("Seleccione fecha de explotación:");
         lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
         lblNewLabel.setBounds(10, 375, 250, 37);
         contentPane.add(lblNewLabel);
 
-        // Calendario
         dateChooser = new JDateChooser();
         dateChooser.setBounds(10, 410, 160, 37);
         dateChooser.setDateFormatString("dd/MM/yyyy");
         dateChooser.setPreferredSize(new Dimension(150, 25));
+        
+       
+        dateChooser.setMinSelectableDate(new java.util.Date());
+        
         contentPane.add(dateChooser);
 
-        // Botón Confirmar Explotación
         btnExplotarMineral = new JButton("Confirmar Explotación");
         btnExplotarMineral.setFont(new Font("Tahoma", Font.PLAIN, 16));
         btnExplotarMineral.setBounds(180, 410, 220, 37);
         contentPane.add(btnExplotarMineral);
 
-        // Etiqueta "Estado:"
         JLabel lblEstado = new JLabel("Estado:");
         lblEstado.setFont(new Font("Tahoma", Font.PLAIN, 14));
         lblEstado.setBounds(10, 467, 80, 25);
         contentPane.add(lblEstado);
 
-        // ComboBox con los estados posibles
         JComboBox<String> estadoCombo = new JComboBox<>(new String[]{"pendiente", "en proceso", "finalizado", "cancelado"});
         estadoCombo.setFont(new Font("Tahoma", Font.PLAIN, 14));
         estadoCombo.setBounds(80, 467, 150, 25);
         contentPane.add(estadoCombo);
 
-        // Botón para guardar el estado seleccionado
         JButton btnGuardarEstado = new JButton("Guardar estado");
         btnGuardarEstado.setFont(new Font("Tahoma", Font.PLAIN, 14));
         btnGuardarEstado.setBounds(250, 467, 150, 30);
         contentPane.add(btnGuardarEstado);
 
-        // Botón Volver
         btnVolver = new JButton("Volver");
         btnVolver.setFont(new Font("Tahoma", Font.PLAIN, 14));
         btnVolver.setBounds(680, 460, 110, 37);
         contentPane.add(btnVolver);
 
-        // Cargar datos
         cargarPedidos();
 
-        // Acción botón Volver
         btnVolver.addActionListener(e -> {
             new HomeOperador(operador).setVisible(true);
             dispose();
         });
 
-        // Acción botón Confirmar Explotación
         btnExplotarMineral.addActionListener((ActionEvent e) -> {
             int fila = tablePedidos.getSelectedRow();
             if (fila == -1) {
@@ -119,7 +112,6 @@ public class VerPedidoOperador extends JFrame {
             }
         });
 
-        // Acción botón Guardar Estado con combo
         btnGuardarEstado.addActionListener((ActionEvent e) -> {
             int fila = tablePedidos.getSelectedRow();
             if (fila == -1) {

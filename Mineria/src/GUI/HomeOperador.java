@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+
 import BLL.Usuario;
 
 public class HomeOperador extends JFrame {
@@ -16,7 +17,7 @@ public class HomeOperador extends JFrame {
         this.operador = operador;
 
         setIconImage(Toolkit.getDefaultToolkit().getImage(HomeOperador.class.getResource("/IMG/steve.png")));
-        setTitle("MENU OPERADOR");
+        setTitle("MENÚ OPERADOR");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 633, 308);
         contentPane = new JPanel();
@@ -24,41 +25,37 @@ public class HomeOperador extends JFrame {
         setContentPane(contentPane);
         contentPane.setLayout(null);
 
-        // Botón Salir
-        JButton SalirCLBT = new JButton("Salir");
-        SalirCLBT.addActionListener(new ActionListener() {
+        JButton btnSalir = new JButton("Salir");
+        btnSalir.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.exit(0); // O volver al login si querés
+                System.exit(0); 
             }
         });
-        SalirCLBT.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        SalirCLBT.setBounds(259, 198, 95, 52);
-        contentPane.add(SalirCLBT);
+        btnSalir.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        btnSalir.setBounds(259, 198, 95, 52);
+        contentPane.add(btnSalir);
 
-        // Título
-        JLabel HomeTituloCL = new JLabel("MINERIA MINASHI");
-        HomeTituloCL.setHorizontalAlignment(SwingConstants.CENTER);
-        HomeTituloCL.setFont(new Font("Segoe UI Semibold", Font.BOLD, 22));
-        HomeTituloCL.setBounds(204, 38, 192, 30);
-        contentPane.add(HomeTituloCL);
+        JLabel lblTitulo = new JLabel("MINERÍA MINASHI");
+        lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+        lblTitulo.setFont(new Font("Segoe UI Semibold", Font.BOLD, 22));
+        lblTitulo.setBounds(204, 38, 192, 30);
+        contentPane.add(lblTitulo);
 
-        // Botón Ver Pedidos
-        JButton VerPedidosOPBT = new JButton("Ver pedidos");
-        VerPedidosOPBT.addActionListener(new ActionListener() {
+        JButton btnVerPedidos = new JButton("Ver pedidos");
+        btnVerPedidos.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 new VerPedidoOperador(operador).setVisible(true);
                 dispose();
             }
         });
-        VerPedidosOPBT.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        VerPedidosOPBT.setBounds(315, 121, 207, 52);
-        contentPane.add(VerPedidosOPBT);
+        btnVerPedidos.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        btnVerPedidos.setBounds(315, 121, 207, 52);
+        contentPane.add(btnVerPedidos);
 
-        // Botón Explotar Mineral (corregido)
         JButton btnExplotarMineral = new JButton("Explotar mineral");
         btnExplotarMineral.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                new ReponerStock(operador).setVisible(true); // CORREGIDO
+                new ReponerStock(operador).setVisible(true); // ← PASO EL USUARIO
                 dispose();
             }
         });
@@ -66,15 +63,14 @@ public class HomeOperador extends JFrame {
         btnExplotarMineral.setBounds(98, 121, 207, 52);
         contentPane.add(btnExplotarMineral);
 
-        // Iconos
-        JLabel lblNewLabel = new JLabel("");
-        lblNewLabel.setIcon(new ImageIcon(HomeOperador.class.getResource("/IMG/diamante-super-chico.png")));
-        lblNewLabel.setBounds(411, 20, 53, 64);
-        contentPane.add(lblNewLabel);
+        JLabel lblIcon1 = new JLabel("");
+        lblIcon1.setIcon(new ImageIcon(HomeOperador.class.getResource("/IMG/diamante-super-chico.png")));
+        lblIcon1.setBounds(411, 20, 53, 64);
+        contentPane.add(lblIcon1);
 
-        JLabel lblNewLabel_1 = new JLabel("");
-        lblNewLabel_1.setIcon(new ImageIcon(HomeOperador.class.getResource("/IMG/diamante-super-chico.png")));
-        lblNewLabel_1.setBounds(141, 20, 53, 64);
-        contentPane.add(lblNewLabel_1);
+        JLabel lblIcon2 = new JLabel("");
+        lblIcon2.setIcon(new ImageIcon(HomeOperador.class.getResource("/IMG/diamante-super-chico.png")));
+        lblIcon2.setBounds(141, 20, 53, 64);
+        contentPane.add(lblIcon2);
     }
 }
