@@ -26,7 +26,7 @@ import DLL.ControllerPedido;
 
 public class ActualizarStock extends JFrame {
 
-	 private static final long serialVersionUID = 1L;
+	    private static final long serialVersionUID = 1L;
 	    private JPanel contentPane;
 	    private Mineral mineralSeleccionado = null;
 	    private JTable tabla;  

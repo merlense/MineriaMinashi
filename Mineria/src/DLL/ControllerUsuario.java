@@ -18,13 +18,13 @@ public class ControllerUsuario {
         this.con = Conexion.getInstance().getConnection();
     }
 
-    public Usuario login(String email, String password) {
+    public Usuario login(String email, String contrasenia) {
         Usuario usuario = null;
         try {
-            PreparedStatement stmt = con.prepareStatement("SELECT * FROM usuario WHERE email = ? AND password = ?");
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM usuario WHERE email = ? AND contrasenia = ?");
             Usuario temp = new Usuario();
             stmt.setString(1, email);
-            stmt.setString(2, temp.encriptar(password));
+            stmt.setString(2, temp.encriptar(contrasenia));
 
             ResultSet rs = stmt.executeQuery();
 
@@ -36,7 +36,7 @@ public class ControllerUsuario {
 
                 switch (tipo.toLowerCase()) {
                     case "cliente":
-                        usuario = new Cliente(id, nombre, apellido, tipo, email, password);
+                        usuario = new Cliente(id, nombre, apellido, tipo, email, contrasenia);
 
                         ControllerPedido controllerPedido = new ControllerPedido();
                         int idPedido = controllerPedido.obtenerPedidoActivo(id);
@@ -46,11 +46,11 @@ public class ControllerUsuario {
                         break;
 
                     case "operador":
-                        usuario = new Operador(id, nombre, apellido, tipo, email, password);
+                        usuario = new Operador(id, nombre, apellido, tipo, email, contrasenia);
                         break;
 
                     case "encargado":
-                        usuario = new Encargado_Venta(id, nombre, apellido, tipo, email, password);
+                        usuario = new Encargado_Venta(id, nombre, apellido, tipo, email, contrasenia);
                         break;
 
                     default:
@@ -71,7 +71,7 @@ public class ControllerUsuario {
 
         try {
             PreparedStatement stmt = con.prepareStatement(
-                "INSERT INTO usuario (nombre, apellido, tipo, email, password) VALUES (?, ?, ?, ?, ?)"
+                "INSERT INTO usuario (nombre, apellido, tipo, email, contrasenia) VALUES (?, ?, ?, ?, ?)"
             );
             stmt.setString(1, usuario.getNombre());
             stmt.setString(2, usuario.getApellido());
@@ -112,18 +112,18 @@ public class ControllerUsuario {
                 String apellido = rs.getString("apellido");
                 String tipo = rs.getString("tipo");
                 String email = rs.getString("email");
-                String password = rs.getString("password");
+                String contrasenia = rs.getString("contrasenia");
 
                 Usuario usuario = null;
                 switch (tipo.toLowerCase()) {
                     case "cliente":
-                        usuario = new Cliente(id, nombre, apellido, tipo, email, password);
+                        usuario = new Cliente(id, nombre, apellido, tipo, email, contrasenia);
                         break;
                     case "operador":
-                        usuario = new Operador(id, nombre, apellido, tipo, email, password);
+                        usuario = new Operador(id, nombre, apellido, tipo, email, contrasenia);
                         break;
                     case "encargado":
-                        usuario = new Encargado_Venta(id, nombre, apellido, tipo, email, password);
+                        usuario = new Encargado_Venta(id, nombre, apellido, tipo, email, contrasenia);
                         break;
                     default:
                         System.out.println("Tipo desconocido: " + tipo);
