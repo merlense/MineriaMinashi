@@ -15,12 +15,5 @@ public class Operador extends Usuario {
 
 
 	//@Override
-	//public void login() {
-			
-		//}
 
-	
-	//public void agregarMineral (Mineral Mineral) {
-		
-	//}
 	}

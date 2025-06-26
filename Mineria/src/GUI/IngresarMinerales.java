@@ -19,7 +19,7 @@ public class IngresarMinerales extends JFrame {
 
         setTitle("Ingresar Mineral");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setBounds(100, 100, 400, 480);  // Altura ajustada
+        setBounds(100, 100, 400, 480); 
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
         setContentPane(contentPane);

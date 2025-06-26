@@ -21,7 +21,6 @@ public class ResumenPedido extends JFrame {
     private JLabel lblTotal, lblFechaPedido, lblFechaEntrega;
     private JLabel lblTotalDescuento;
 
-    // Mapa para guardar idPedido de cada opción del combo
     private Map<String, Integer> pedidoMap = new HashMap<>();
 
     public ResumenPedido(Usuario usuario) {

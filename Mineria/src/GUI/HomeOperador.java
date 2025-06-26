@@ -55,7 +55,7 @@ public class HomeOperador extends JFrame {
         JButton btnExplotarMineral = new JButton("Explotar mineral");
         btnExplotarMineral.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                new ReponerStock(operador).setVisible(true); // ← PASO EL USUARIO
+                new ReponerStock(operador).setVisible(true);
                 dispose();
             }
         });

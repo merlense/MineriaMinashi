@@ -6,10 +6,7 @@ public class Encargado_Venta extends Usuario {
 		// TODO Auto-generated constructor stub
 	}
 	
+	
+}
 
-	//@Override
-	//public void login() {
-			
-		}
-		
-//}
+	

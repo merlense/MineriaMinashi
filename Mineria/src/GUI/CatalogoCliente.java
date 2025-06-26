@@ -138,14 +138,14 @@ public class CatalogoCliente extends JFrame {
         
         btnNewButton_1.addActionListener(e -> {
             ControllerPedido controllerPedido = new ControllerPedido();
-            // Primero obtengo el pedido activo (pendiente)
+            
             int pedidoActivo = controllerPedido.obtenerPedidoActivo(usuario.getId());
 
             if (pedidoActivo != -1) {
                 boolean finalizado = controllerPedido.finalizarPedido(pedidoActivo);
 
                 if (finalizado) {
-                    // Ahora creo un nuevo pedido para que quede listo
+                   
                     int nuevoPedido = controllerPedido.crearPedido(usuario.getId());
                     JOptionPane.showMessageDialog(null, "Pedido finalizado con éxito. Nuevo pedido creado.");
 

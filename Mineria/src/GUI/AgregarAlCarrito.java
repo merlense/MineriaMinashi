@@ -121,10 +121,10 @@ public class AgregarAlCarrito extends JFrame {
                         JOptionPane.showMessageDialog(null, "Error al agregar mineral al pedido.");
                     }
                 } else {
-                    // Mostrar mensaje de descuento
+                    
                     JOptionPane.showMessageDialog(null, "10% de descuento por bajo stock.");
 
-                    // Agregar mineral igual, sin manejar descuento en la BD
+                    
                     boolean agregado = controllerPedido.agregarMineralAPedido(idPedido, idMineral, cantidadSeleccionada);
                     if (agregado) {
                         dispose();

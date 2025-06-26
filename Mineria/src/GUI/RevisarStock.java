@@ -32,7 +32,8 @@ public class RevisarStock extends JFrame {
     private JTable tabla;
     private JButton alertaStock;
     private JButton VolverBTN;
-    private JButton btnFiltrar;
+    private JButton btnFiltrarExacto;
+    private JButton btnLimpiarFiltro;
     private JTextField textField;
     private JLabel lblNewLabel;
     private LinkedList<Mineral> minerales; 
@@ -111,35 +112,37 @@ public class RevisarStock extends JFrame {
         contentPane.add(VolverBTN);
 
         VolverBTN.addActionListener(e -> {
-            HomeEncargado home = new HomeEncargado(usuario); // <--- PASAR EL USUARIO
+            HomeEncargado home = new HomeEncargado(usuario);
             home.setVisible(true);
             dispose();
         });
 
+        textField = new JTextField();
+        textField.setBounds(10, 287, 165, 26);
+        contentPane.add(textField);
+        textField.setColumns(10);
 
-        btnFiltrar = new JButton("Filtrar");
-        btnFiltrar.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        btnFiltrar.addActionListener(new ActionListener() {
+        btnFiltrarExacto = new JButton("Filtrar");
+        btnFiltrarExacto.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        btnFiltrarExacto.setBounds(186, 287, 100, 26);
+        contentPane.add(btnFiltrarExacto);
+
+        btnFiltrarExacto.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String texto = textField.getText().trim();
-                if (texto.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Por favor ingrese una cantidad para filtrar.");
+
+                if (!texto.matches("\\d+")) {
+                    JOptionPane.showMessageDialog(null, "Ingrese un número entero positivo.");
                     return;
                 }
 
-                int cantidadFiltro;
-                try {
-                    cantidadFiltro = Integer.parseInt(texto);
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(null, "Debe ingresar un número válido.");
-                    return;
-                }
+                int cantidadExacta = Integer.parseInt(texto);
 
                 DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
                 modelo.setRowCount(0);
 
                 for (Mineral m : minerales) {
-                    if (m.getUnidades() <= cantidadFiltro) {
+                    if (m.getUnidades() == cantidadExacta) {
                         Object[] fila = {
                             m.getIdMineria(),
                             m.getTipo(),
@@ -155,22 +158,41 @@ public class RevisarStock extends JFrame {
             }
         });
 
-        btnFiltrar.setBounds(186, 287, 113, 26);
-        contentPane.add(btnFiltrar);
+        btnLimpiarFiltro = new JButton("Limpiar filtro");
+        btnLimpiarFiltro.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        btnLimpiarFiltro.setBounds(296, 287, 140, 26);
+        contentPane.add(btnLimpiarFiltro);
 
-        textField = new JTextField();
-        textField.setBounds(10, 287, 165, 26);
-        contentPane.add(textField);
-        textField.setColumns(10);
+        btnLimpiarFiltro.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                textField.setText("");
+
+                DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
+                modelo.setRowCount(0);
+
+                for (Mineral m : minerales) {
+                    Object[] fila = {
+                        m.getIdMineria(),
+                        m.getTipo(),
+                        m.getUnidades(),
+                        m.getPeso(),
+                        m.getPrecio(),
+                        m.getPureza() + "%",
+                        m.getDescuento() + "%"
+                    };
+                    modelo.addRow(fila);
+                }
+            }
+        });
 
         lblNewLabel = new JLabel("Filtro");
         lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 13));
         lblNewLabel.setBounds(10, 272, 144, 13);
         contentPane.add(lblNewLabel);
 
-        JLabel lblNewLabel_1 = new JLabel("Filtra por cantidad de stock");
+        JLabel lblNewLabel_1 = new JLabel("Filtra por cantidad exacta de stock");
         lblNewLabel_1.setForeground(new Color(0, 64, 128));
-        lblNewLabel_1.setBounds(10, 317, 144, 13);
+        lblNewLabel_1.setBounds(10, 317, 250, 13);
         contentPane.add(lblNewLabel_1);
 
         JLabel lblRevisarStock = new JLabel("REVISAR STOCK");

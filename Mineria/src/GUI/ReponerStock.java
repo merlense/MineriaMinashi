@@ -117,8 +117,7 @@ public class ReponerStock extends JFrame {
                 JOptionPane.showMessageDialog(null, "Ingrese un número válido en cantidad.");
                 return;
             }
-
-            // Sumar cantidad y actualizar en BD
+            
             int nuevaCantidad = mineralSeleccionado.getUnidades() + cantidad;
 
             boolean exito = controlador.actualizarCantidad(mineralSeleccionado.getIdMineria(), nuevaCantidad);

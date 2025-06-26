@@ -14,7 +14,6 @@ public class Usuario implements Encriptador {
     protected String email;
     protected String Contrasenia;
 
-    // Constructor completo
     public Usuario(int id, String nombre, String apellido, String tipo, String email, String contrasenia) {
         this.id = id;
         this.nombre = nombre;
@@ -24,7 +23,6 @@ public class Usuario implements Encriptador {
         this.Contrasenia = contrasenia;
     }
 
-    // Constructor sin ID
     public Usuario(String nombre, String apellido, String tipo, String email, String contrasenia) {
         this.nombre = nombre;
         this.apellido = apellido;
@@ -33,10 +31,8 @@ public class Usuario implements Encriptador {
         this.Contrasenia = contrasenia;
     }
 
-    // Constructor vacío
     public Usuario() {}
 
-    // Getters y setters
     public int getId() { return id; }
     public void setId(int id) { 
     	this.id = id; }
@@ -69,27 +65,6 @@ public class Usuario implements Encriptador {
         return "Usuario [id=" + id + ", nombre=" + nombre + ", apellido=" + apellido +
                ", tipo=" + tipo + ", email=" + email + ", Contrasenia=" + Contrasenia + "]";
     }
-
-    public boolean login() {
-        if (this.email == null || this.email.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "El correo no puede estar vacío");
-            return false;
-        }
-        if (this.Contrasenia == null || this.Contrasenia.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "La contraseña no puede estar vacía");
-            return false;
-        }
-        return true;
-    }
-
-    public void agregarUsuario() {
-    	if (this.getNombre().isEmpty() || this.getContrasenia().isEmpty()) {
-    		JOptionPane.showMessageDialog(null, "Nombre o contraseña no pueden estar vacíos");
-    	} else {
-    		ControllerUsuario controller = new ControllerUsuario();
-    		controller.agregarUsuario(this);
-    	}
-    }
     
     public boolean validarRegistro() {
         if (
@@ -116,7 +91,6 @@ public class Usuario implements Encriptador {
             return true;
         }
     }
-
     
     public boolean registrarUsuario() {
         if (!validarRegistro()) {
@@ -131,10 +105,8 @@ public class Usuario implements Encriptador {
         }
 
         controller.agregarUsuario(this);
-        JOptionPane.showMessageDialog(null, "Usuario registrado correctamente");
         return true;
     }
-
     
 }
 

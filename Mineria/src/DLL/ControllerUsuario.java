@@ -38,7 +38,6 @@ public class ControllerUsuario {
                     case "cliente":
                         usuario = new Cliente(id, nombre, apellido, tipo, email, password);
 
-                        // ✅ Crear pedido si no tiene uno activo
                         ControllerPedido controllerPedido = new ControllerPedido();
                         int idPedido = controllerPedido.obtenerPedidoActivo(id);
                         if (idPedido == -1) {
@@ -66,9 +65,8 @@ public class ControllerUsuario {
     }
 
     public void agregarUsuario(Usuario usuario) {
-        // Validar que el email termine con @gmail.com
         if (usuario.getEmail() == null || !usuario.getEmail().toLowerCase().endsWith("@gmail.com")) {
-            throw new IllegalArgumentException("El email debe terminar con '@gmail.com'.");
+            throw new IllegalArgumentException("El email no es valido");
         }
 
         try {
