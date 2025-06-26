@@ -76,7 +76,26 @@ public class ControllerMineral {
         }
     }
 
+    public boolean insertarNuevoMineral(Mineral m) {
+        try {
+            String query = "INSERT INTO mineral (tipo, unidades, peso, pureza, precio, descuento) VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, m.getTipo());
+            ps.setInt(2, m.getUnidades());
+            ps.setDouble(3, m.getPeso());
+            ps.setDouble(4, m.getPureza());
+            ps.setDouble(5, m.getPrecio());
+            ps.setInt(6, m.getDescuento());
 
+            int filas = ps.executeUpdate();
+            ps.close();
+            return filas > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
+    
+   }
 
-}

@@ -20,7 +20,6 @@ public class CatalogoCliente extends JFrame {
     private Mineral mineralSeleccionado = null;
     private JTable tabla;  
 
-
     public CatalogoCliente(Usuario  usuario) {
     	setIconImage(Toolkit.getDefaultToolkit().getImage(CatalogoCliente.class.getResource("/IMG/diamante-super-chico.png")));
         setTitle("Catálogo de Minerales");
