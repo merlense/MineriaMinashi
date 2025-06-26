@@ -21,7 +21,7 @@ public class ControllerPedido {
         try {
             String consulta = "SELECT p.idPedido FROM pedido p " +
                               "JOIN usuario_tiene_pedido utp ON p.idPedido = utp.idPedido " +
-                              "WHERE utp.idUsuario = ? AND p.fechaEntrega IS NULL";
+                              "WHERE utp.idUsuario = ? AND p.estado = 'pendiente'";
             PreparedStatement checkStmt = con.prepareStatement(consulta);
             checkStmt.setInt(1, idUsuario);
             ResultSet rs = checkStmt.executeQuery();
@@ -82,10 +82,9 @@ public class ControllerPedido {
             return false;
         }
     }
-    
+
     public boolean finalizarPedido(int idPedido) {
         try {
-            // Solo actualizar el estado, la fechaEntrega se puede setear aparte si querés
             String sql = "UPDATE pedido SET estado = 'en proceso' WHERE idPedido = ?";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, idPedido);
@@ -102,7 +101,7 @@ public class ControllerPedido {
         try {
             String sql = "SELECT p.idPedido FROM pedido p " +
                          "JOIN usuario_tiene_pedido utp ON p.idPedido = utp.idPedido " +
-                         "WHERE utp.idUsuario = ? AND p.fechaEntrega IS NULL";
+                         "WHERE utp.idUsuario = ? AND p.estado = 'pendiente'";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, idUsuario);
             ResultSet rs = ps.executeQuery();
